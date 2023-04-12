@@ -1,4 +1,4 @@
-import BoardComponent from '@/components/chessboard/BoardComponent'
+import AnimatedBoard from '@/components/chessboard/AnimatedBoard'
 import NavbarComponent from '@/components/navbar/Navbar'
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
 		<main className="flex-row flex columns-2 justify-center align-middle items-center w-full">
 			<div className="w-1/2 col-span-1 relative justify-center flex mt-5">
 			<span>
-				<BoardComponent />
+				<AnimatedBoard />
 			</span>
 			</div>
 			<div className="text-white col-span-1 w-1/2 text-center text-7xl font-bold flex-row">
