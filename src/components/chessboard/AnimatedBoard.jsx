@@ -38,7 +38,7 @@ const AnimatedBoard = () => {
     async function playMoves () {
         if (firstRun) {
             firstRun = false;
-            await readOpening("Ruy Lopez");
+            await readOpening("Ruy Lopez"); // change to picking a random opening
             openingVariation = await setFirstLine("Ruy Lopez");
         }
         const gameCopy = new Chess();
@@ -68,13 +68,13 @@ const AnimatedBoard = () => {
 	return (
 		<>
 			<Chessboard 
-                boardWidth={boardWidth} 
-                position={position} 
-                isDraggablePiece={isDraggable} 
-                animationDuration={750} 
+                boardWidth={boardWidth}
+                position={position}
+                isDraggablePiece={isDraggable}
+                animationDuration={750}
             />
 		</>
 	);
 };
 
-export default AnimatedBoard
+export default AnimatedBoard;
