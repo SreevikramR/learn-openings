@@ -1,4 +1,5 @@
 import './globals.css'
+import ContextWrapper from '@/components/wrapper/contextWrapper'
 
 export const metadata = {
 	title: 'Create Next App',
@@ -8,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en" className="h-full">
-			<body className="h-full">{children}</body>
+			<ContextWrapper>
+				<body className="h-full">{children}</body>
+			</ContextWrapper>
 		</html>
 	)
 }

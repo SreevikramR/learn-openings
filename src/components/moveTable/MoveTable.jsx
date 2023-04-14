@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect } from "react";
 import { useChessboard } from "@/context/BoardContext";
+import styles from "./MoveTable.module.css";
 
 const MoveTable = () => {
   const {moveHistory, openingLine, moveResult, moveSequence, openingComplete, setOpeningComplete, playerColor} = useChessboard()
@@ -66,9 +67,9 @@ const MoveTable = () => {
   
       let row = (
         <tr key={rowNumber}>
-          <td className="indexNumber">{rowNumber}</td>
-          <td id={whiteCellId} className="">{whiteMove}</td>
-          <td id={blackCellId} className="">{blackMove}</td>
+          <td className={styles.indexNumber}>{rowNumber}</td>
+          <td id={whiteCellId} className={styles.td}>{whiteMove}</td>
+          <td id={blackCellId} className={styles.td}>{blackMove}</td>
         </tr>
       );
   
@@ -105,15 +106,15 @@ const MoveTable = () => {
     }, [moveHistory]);
   
     return (
-      <table id='movesTable' className="bg-teal-950">
-        <thead>
-          <tr>
-            <th colSpan={3}>
-              <h2>{openingLine}</h2>
+      <table id='movesTable' className={styles.moveTable}>
+        <thead className={styles.thead}>
+          <tr className={styles.tr}>
+            <th colSpan={3} className={styles.th}>
+              <h2 className={styles.h2}>{openingLine}</h2>
             </th>
           </tr>
         </thead>
-        <tbody>{rows}</tbody>
+        <tbody className={styles.tbody}>{rows}</tbody>
       </table>
     );
 }
