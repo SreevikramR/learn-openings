@@ -33,7 +33,10 @@ function TrialPage() {
 				    <TrainBoardWhite />
 				</span>
 			</div>
-			<div className="text-white col-span-1 w-1/2 text-center text-7xl font-bold flex-row">   
+			<div className="text-white col-span-1 w-1/2 text-center text-7xl font-bold flex-row">
+                <div className="text-5xl pb-3 mr-16">
+                    {openingName}
+                </div>
                 <MoveTable />
             </div>
 		</main>
