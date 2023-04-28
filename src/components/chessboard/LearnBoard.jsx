@@ -14,21 +14,7 @@ const LearnBoard = () => {
 
 	tempMoveHistory = moveHistory;
 
-	var viewPortWidth = window.innerWidth;
-
 	const [boardWidth, setBoardWidth] = useState(500);
-
-	viewPortWidth = window.innerWidth;
-
-	window.onresize = function () {
-		viewPortWidth = window.innerWidth;
-
-		if (viewPortWidth / 2 > 500) {
-			setBoardWidth(500);
-		} else {
-			setBoardWidth(viewPortWidth / 2.2);
-		}
-	};
 
 	useEffect(() => {
 		setGame(new Chess());
@@ -43,6 +29,13 @@ const LearnBoard = () => {
 		} else {
 			getExpectedMove()
 		}
+		window.addEventListener('resize', ()=> {
+            if (viewPortWidth / 2 > 500) {
+				setBoardWidth(500);
+			} else {
+				setBoardWidth(viewPortWidth / 2.2);
+			}
+        })
 	}, []);
 
 	async function blackFirstMove(){
@@ -95,7 +88,7 @@ const LearnBoard = () => {
 	}, [openingLine, playerColor]);
 
 	useEffect(() => {
-		viewPortWidth = window.innerWidth;
+		let viewPortWidth = window.innerWidth;
 
 		if (viewPortWidth / 2 > 500) {
 			setBoardWidth(500);

@@ -9,7 +9,7 @@ let firstRun = true;
 const AnimatedBoard = () => {
     const [game, setGame] = useState(new Chess());
     const [position, setPosition] = useState();
-    const [boardWidth, setBoardWidth] = useState(window.innerWidth / 3);
+    const [boardWidth, setBoardWidth] = useState(500);
 
     let moveSequence = [];
     let openingVariation;
@@ -17,11 +17,10 @@ const AnimatedBoard = () => {
     useEffect(() => {
         setBoardWidth(window.innerWidth / 3);
         playMoves();
+        window.addEventListener('resize', ()=> {
+            setBoardWidth(window.innerWidth / 3);
+        })     
     }, []);
-
-    window.onresize = () => {
-        setBoardWidth(window.innerWidth / 3);
-    };
 
     const makeMove = (move) => {
         const gameCopy = game;
@@ -72,6 +71,7 @@ const AnimatedBoard = () => {
                 position={position}
                 isDraggablePiece={isDraggable}
                 animationDuration={750}
+                id="chessboard"
             />
 		</>
 	);
