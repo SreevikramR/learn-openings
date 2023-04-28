@@ -1,5 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { createUserWithEmailAndPassword, setPersistence, browserSessionPersistence, updateProfile } from 'firebase/auth';
+import { auth } from '@/firebase';
+import { useRouter } from 'next/navigation';
+import { checkUsernameExists, addUsername, createUser } from '@/app/api/firebaseAccess';
 
 const RegisterForm = () => {
     const [email, setEmail] = useState("")
@@ -8,36 +12,37 @@ const RegisterForm = () => {
     const [fName, setFName] = useState("")
     const [lName, setLName] = useState("")
     const [username, setUsername] = useState("")
-    const [error, setError] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
         if (password !== passwordConfirm) {
-            document.getElementById("errorBox").style.display = "block";
+            // document.getElementById("errorBox").style.display = "block";
             setErrorMessage("Passwords don't match");
             setLoading(false);
-        } else if (firstName === "") {
-            document.getElementById("errorBox").style.display = "block";
+        } else if (fName === "") {
+            // document.getElementById("errorBox").style.display = "block";
             setErrorMessage("Please enter a valid name");
             setLoading(false);
-        } else if (lastName === "") {
-            document.getElementById("errorBox").style.display = "block";
+        } else if (lName === "") {
+            // document.getElementById("errorBox").style.display = "block";
             setErrorMessage("Please enter a valid name");
             setLoading(false);
-        } else if (userName === "") {
-            document.getElementById("errorBox").style.display = "block";
+        } else if (username === "") {
+            // document.getElementById("errorBox").style.display = "block";
             setErrorMessage("Please enter a valid username");
             setLoading(false);
         } else if (password === "") {
-            document.getElementById("errorBox").style.display = "block";
+            // document.getElementById("errorBox").style.display = "block";
             setErrorMessage("Please enter a password");
             setLoading(false);
         } else {
-            const doesExist = await checkUsernameExists(userName);
+            const doesExist = await checkUsernameExists(username);
             if (doesExist) {
-                document.getElementById("errorBox").style.display = "block";
+                // document.getElementById("errorBox").style.display = "block";
                 setErrorMessage("Username already exists");
                 setLoading(false);
             } else {
@@ -46,16 +51,11 @@ const RegisterForm = () => {
                         createUserWithEmailAndPassword(auth, email, password)
                     );
                     console.log("user: " + auth.currentUser);
-                    uid = auth.currentUser.uid;
-                    console.log("user uid: " + uid);
-                    await updateProfile(auth.currentUser, {
-                        displayName: firstName,
-                    });
-                    await createUser(firstName, lastName, userName);
-                    await addUsername(userName);
-                    navigate("/dashboard");
+                    await createUser(fName, lName, username);
+                    await addUsername(username);
+                    router.push("/dashboard");
                 } catch (error) {
-                    document.getElementById("errorBox").style.display = "block";
+                    // document.getElementById("errorBox").style.display = "block";
                     switch (error.code) {
                         case "auth/email-already-exists":
                             setErrorMessage("Account with Email already exists");
@@ -80,7 +80,7 @@ const RegisterForm = () => {
                             break;
                     }
                     setLoading(false);
-                    console.log(error.code);
+                    console.log(error);
                 }
             }
         }
@@ -142,7 +142,7 @@ const RegisterForm = () => {
                 onChange={(e) => setPasswordConfirm(e.target.value)}
                 className="bg-transparent border-0 border-b-2 border-b-white focus:outline-none pb-2"
             />
-            <button onClick={handleSubmit} className="bg-blue-700 border-2 border-blue-700 text-white py-2 px-4 rounded-lg mt-10 mb-10 hover:border-white">Register</button>
+            <button onClick={handleSubmit} disabled={loading} className="bg-blue-700 border-2 border-blue-700 text-white py-2 px-4 rounded-lg mt-10 mb-10 hover:border-white disabled:bg-blue-500">Register</button>
         </form>
     )
 }
