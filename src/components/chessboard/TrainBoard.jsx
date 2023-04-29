@@ -30,10 +30,10 @@ const TrainBoardWhite = () => {
 			}, 1500);  
 		}
 		window.addEventListener('resize', ()=> {
-            if (viewPortWidth / 2 > 500) {
+            if (window.innerWidth / 2 > 500) {
 				setBoardWidth(500);
 			} else {
-				setBoardWidth(viewPortWidth / 2.2);
+				setBoardWidth(window.innerWidth / 2.2);
 			}
         })
 	}, []);
@@ -72,12 +72,10 @@ const TrainBoardWhite = () => {
 	}
 
 	useEffect(() => {
-		viewPortWidth = window.innerWidth;
-
-		if (viewPortWidth / 2 > 500) {
+		if (window.innerWidth / 2 > 500) {
 			setBoardWidth(500);
 		} else {
-			setBoardWidth(viewPortWidth / 2.5);
+			setBoardWidth(window.innerWidth / 2.5);
 		}
 	}, []);
 

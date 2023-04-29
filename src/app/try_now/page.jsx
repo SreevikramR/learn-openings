@@ -21,7 +21,6 @@ function TrialPage() {
         const sequence = await getMoveSequence(line)
         await setMoveSequence(sequence);
         setMoveHistory([]);
-
     }
 
     return(

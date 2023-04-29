@@ -61,6 +61,7 @@ export async function readOpening(openingName){
     
         openingLines = Object.keys(openingData).sort()
         console.log(openingLines)
+        previousOpeningName = openingName
     }
 }
 
@@ -80,7 +81,7 @@ export function getMoveSequence(openingLine){
 }
 
 export async function getAlternateLine(currentLine) {
-    if(openingData == undefined){
+    if(openingData == undefined) {
         await readOpening("Ruy Lopez")
     } else if (previousOpeningName != "Ruy Lopez"){
         await readOpening("Ruy Lopez")
