@@ -1,5 +1,6 @@
 import './globals.css'
 import ContextWrapper from '@/components/wrapper/contextWrapper'
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
 	title: 'Create Next App',
