@@ -13,6 +13,7 @@ export default function RootLayout({ children }) {
 			<ContextWrapper>
 				<body className="h-full">{children}</body>
 			</ContextWrapper>
+			<Analytics/>
 		</html>
 	)
 }
