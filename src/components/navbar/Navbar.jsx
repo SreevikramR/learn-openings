@@ -1,9 +1,9 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase'
 import { getfName } from '@/app/api/firebaseAccess'
+import { onAuthStateChanged } from 'firebase/auth'
 
 const NavbarComponent = () => {
 	const [name, setName] = useState('')
@@ -11,18 +11,21 @@ const NavbarComponent = () => {
 	let stateChanging = false;
 
 	useEffect(() => {
-		console.log("auth triggered")
-		if(stateChanging) return;
-		stateChanging = true;
-		if (auth.currentUser) {
-			console.log("logged in")
-			setIsLoggedIn(true)
-			setFirstName()
-		} else {
-			console.log("not logged in")
-		}
-		stateChanging = false;
-	}, [auth])
+		onAuthStateChanged(auth, (user) => {
+			console.log("auth triggered")
+			if(stateChanging) return;
+			stateChanging = true;
+			if (user) {
+				console.log("logged in")
+				setIsLoggedIn(true)
+				setFirstName()
+			} else {
+				console.log("not logged in")
+			}
+			stateChanging = false;
+		});
+	}, [])
+
 
 	const notLoggedIn = () => {
 		return (
@@ -51,7 +54,7 @@ const NavbarComponent = () => {
 			<div className='hidden w-full lg:inline-flex lg:flex-grow lg:w-auto'>
 				<div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start flex flex-col lg:h-auto text-white'>
 					<Link href="/dashboard">
-						<span className='lg:inline-flex lg:w-auto w-full pr-3 py-2 rounded border-2 border-l-zinc-900 border-black text-white items-center justify-center text-xl font-semibold italic'>
+						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded border-2 border-l-zinc-900 border-black text-white items-center justify-center text-xl font-semibold italic'>
 							Hi {name}
 						</span>
 					</Link>
