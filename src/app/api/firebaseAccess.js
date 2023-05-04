@@ -103,7 +103,6 @@ export async function getAllOpenings(){
         // doc.data() is never undefined for query doc snapshots
         openings.push(doc.id)
     });
-    console.log(openings)
     return openings
 }
 
