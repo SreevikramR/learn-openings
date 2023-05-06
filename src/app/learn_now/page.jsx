@@ -6,15 +6,17 @@ import { useChessboard } from '@/context/BoardContext'
 import { getAllOpenings } from '../api/firebaseAccess'
 import styles from "@/app/styles/openingTiles.module.css"
 import ruyLopez from "../../../public/ruy-lopez.png"
+import PopUp from '@/components/popUp/PopUp'
 
 const LearnPick = () => {
-	const {setPopUpState, setAllOpenings, allOpenings, openingName, setOpeningName} = useChessboard()
+	const { setAllOpenings, allOpenings, openingName, setOpeningName, setPopUpType} = useChessboard()
 	const [tiles, setTiles] = useState()
 
 	useEffect(() => {
 		getOpeningData().then((openingsList) => {
 			setTileData(openingsList)
 		})
+		setPopUpType("learn")
 	}, [])
 
 	async function getOpeningData() { 
@@ -39,7 +41,7 @@ const LearnPick = () => {
 				}
 				let opening = openingsList[itemIndex]
 				let _openingBlock = (
-					<div key={opening} className={styles.openingBlock}>
+					<div key={opening} className={styles.openingBlock} onClick={() => {handleTileClick(opening)}}>
 						<Image src={ruyLopez} alt="Ruy Lopez" width={imgWidth} height={imgWidth} className="self-center rounded-md"/>
 						<span className="text-white italic text-2xl pt-2">{opening}</span>
 					</div>
@@ -57,6 +59,22 @@ const LearnPick = () => {
 		setTiles(tempTiles)
 	}
 
+	async function handleTileClick(opening) {
+		console.log(opening)
+		setOpeningName(opening)
+		var modal = document.getElementById("modal");
+		var span = document.getElementById("close");
+		modal.style.display = "block";
+		span.addEventListener("click", () => {
+			modal.style.display = "none";
+		})
+		window.addEventListener('click', ()=> {
+            if (event.target == modal) {
+				modal.style.display = "none";
+			}
+        })
+	}
+
 	const _learn = () => {
 		return(
 			<div className={styles.grid}>
@@ -65,9 +83,9 @@ const LearnPick = () => {
 		)
 	}
 
-
 	return (
 		<>
+			<PopUp/>
 			<NavbarComponent/>
 			<div className="flex justify-center">
 				<span className="text-4xl font-bold">Pick Opening to Learn</span>
