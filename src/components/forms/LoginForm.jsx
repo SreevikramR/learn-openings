@@ -54,7 +54,7 @@ const LoginForm = () => {
             <label className="pb-2">Email</label>
             <input
                 type="email"
-                placeholder="name@mail.com"
+                placeholder="name@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-transparent border-0 border-b-2 border-b-white focus:outline-none pb-2"

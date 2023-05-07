@@ -10,7 +10,7 @@ let nextMove;
 let tempMoveHistory = []
 let playedFirstMove = false
 
-const TrainBoardWhite = () => {
+const TrainBoard = () => {
 
 	const {moveHistory, setMoveHistory, openingLine, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, setPlayerColor} = useChessboard()
 
@@ -178,4 +178,4 @@ const TrainBoardWhite = () => {
 	);
 };
 
-export default TrainBoardWhite;
+export default TrainBoard;

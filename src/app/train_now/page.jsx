@@ -3,13 +3,13 @@ import NavbarComponent from '@/components/navbar/Navbar'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useChessboard } from '@/context/BoardContext'
-import { getAllOpenings } from '../api/firebaseAccess'
+import { getAllOpenings, getLines, readOpening, setFirstLine } from '../api/firebaseAccess'
 import styles from "@/app/styles/openingTiles.module.css"
 import ruyLopez from "../../../public/ruy-lopez.png"
 import PopUp from '@/components/popUp/PopUp'
 
 const TrainPick = () => {
-	const {setPopUpType, setAllOpenings, allOpenings, openingName, setOpeningName} = useChessboard()
+	const {setPopUpType, setAllOpenings, allOpenings, openingName, setOpeningName, setOpeningLine, setLineVariations, setPlayerColor} = useChessboard()
 	const [tiles, setTiles] = useState()
 
 	useEffect(() => {
@@ -68,8 +68,15 @@ const TrainPick = () => {
 	}
 
 	async function handleTileClick(opening) {
-		console.log(opening)
 		setOpeningName(opening)
+		openPopUp()
+		await readOpening(opening)
+		await setOpeningLine(await setFirstLine(opening))
+		await setLineVariations(await getLines())
+		await setPlayerColor("white")
+	}
+
+	async function openPopUp() {
 		var modal = document.getElementById("modal");
 		var span = document.getElementById("close");
 		modal.style.display = "block";
