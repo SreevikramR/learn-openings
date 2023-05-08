@@ -5,7 +5,7 @@ import { getMoveSequence } from '@/app/api/firebaseAccess'
 import styles from "./VariationTable.module.css"
 
 const VariationTable = () => {
-    const {lineVariations, setOpeningLine, setMoveSequence, setOpeningComplete, setMoveHistory} = useChessboard()
+    const {lineVariations, setOpeningLine, setMoveSequence, setOpeningComplete, setMoveHistory, openingName} = useChessboard()
 
     let lines = lineVariations
 
@@ -29,7 +29,8 @@ const VariationTable = () => {
     }
 
     return (
-        <>
+        <div className="flex flex-col">
+            <h2 className={styles.openingName}>{openingName}</h2>
             <table className={styles.table}>
                 <thead>
                     <tr>
@@ -40,7 +41,7 @@ const VariationTable = () => {
                 </thead>
                 <tbody>{rows}</tbody>
             </table>
-        </>
+        </div>
     )
 }
 

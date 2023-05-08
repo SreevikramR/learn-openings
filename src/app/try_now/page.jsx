@@ -27,17 +27,17 @@ function TrialPage() {
         <>
             <NavbarComponent />
             <main className="flex-row flex columns-2 justify-center align-middle items-center w-full">
-			<div className="w-1/2 col-span-1 relative justify-center flex mt-5">
-				<span>
-				    <TrainBoard />
-				</span>
-			</div>
-			<div className="text-white col-span-1 w-1/2 text-center text-7xl font-bold flex-row">
-                <div className="text-5xl pb-3 mr-16">
-                    {openingName}
+                <div className="w-1/2 col-span-1 relative justify-center flex mt-5">
+                    <span>
+                        <TrainBoard />
+                    </span>
                 </div>
-                <MoveTable />
-            </div>
+                <div className="text-white col-span-1 w-1/2 text-center text-7xl font-bold flex-row">
+                    <div className="text-5xl pb-3 mr-16">
+                        {openingName}
+                    </div>
+                    <MoveTable />
+                </div>
 		</main>
         </>
     )

@@ -1,11 +1,12 @@
 "use client"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useChessboard } from "@/context/BoardContext";
 import styles from "./MoveTable.module.css";
 
 const MoveTable = () => {
-	const {moveHistory, openingLine, moveResult, moveSequence, openingComplete, setOpeningComplete, playerColor} = useChessboard()
-	
+	const {moveHistory, openingLine, moveResult, moveSequence, openingComplete, setOpeningComplete, playerColor, setPlayerColor} = useChessboard()
+	const [isPlayerWhite, setIsPlayerWhite] = useState(true);
+
 	useEffect(() => {
 		setOpeningComplete(false)
 	}, [])
@@ -102,13 +103,28 @@ const MoveTable = () => {
 			}
 		}, 50);
 	}, [moveHistory]);
+
+	function togglePlayerColor(){
+		setIsPlayerWhite(isWhite => !isWhite);
+        setPlayerColor(color => color === 'white' ? 'black' : 'white');
+		if(isPlayerWhite) {
+			document.getElementById('toggleSwitchHandle').classList = styles.toggleSwitchHandleBlack;
+		} else {
+			document.getElementById('toggleSwitchHandle').classList = styles.toggleSwitchHandleWhite;
+		}
+	}
   
 	return (
 		<table id='movesTable' className={styles.moveTable}>
 			<thead className={styles.thead}>
 				<tr className={styles.tr}>
 					<th colSpan={3} className={styles.th}>
-					<h2 className={styles.h2}>{openingLine}</h2>
+						<div className={styles.headerBox}>
+							<h2 className={styles.h2}>{openingLine}</h2>
+							<div className={styles.toggleSwitch} onClick={togglePlayerColor}>
+								<div id="toggleSwitchHandle" className={styles.toggleSwitchHandleWhite}></div>
+							</div>
+						</div>
 					</th>
 				</tr>
 			</thead>

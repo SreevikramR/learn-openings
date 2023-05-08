@@ -10,8 +10,7 @@ import { getAlternateLine } from '../api/firebaseAccess'
 import VariationTable from '@/components/variationTable/VariationTable'
 
 const TrainPage = () => {
-    const {setMoveHistory, openingLine, setOpeningLine, openingName, setMoveSequence, setOpeningComplete, setPlayerColor} = useChessboard()
-    const [isPlayerWhite, setIsPlayerWhite] = useState(true);
+    const {setMoveHistory, openingLine, setOpeningLine, openingName, setMoveSequence, setOpeningComplete} = useChessboard()
 
     useEffect(() => {
         setMoveSequence(getMoveSequence(openingLine));
@@ -30,11 +29,6 @@ const TrainPage = () => {
         setMoveHistory([]);
     }
 
-    function togglePlayerColor() {
-        setIsPlayerWhite(isWhite => !isWhite);
-        setPlayerColor(color => color === 'white' ? 'black' : 'white');
-    }
-
     return (
         <>
             <NavbarComponent />
@@ -46,10 +40,6 @@ const TrainPage = () => {
                     <TrainBoard />
                 </div>
                 <div className={styles.learn_hc3}>
-                    <h1 style={{paddingTop:0, marginLeft:"15%"}}>{openingName}</h1>
-                    <div className={styles.toggleSwitch} onClick={togglePlayerColor}>
-                        <div className={`toggle-switch-handle ${isPlayerWhite ? 'white' : 'black'}`}></div>
-                    </div>
                     <MoveTable />
                 </div>
             </div>

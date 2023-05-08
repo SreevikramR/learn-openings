@@ -5,7 +5,6 @@ const MoveSelector = (moveHistory, openingLine) => {
     var moveSequence = [];
     moveSequence = getMoveSequence(openingLine);
 
-    //console.log(moveHistory);
     var i = 0;
     var j = moveHistory.length;
 
@@ -15,10 +14,8 @@ const MoveSelector = (moveHistory, openingLine) => {
 
     for (i = moveHistory.length - 1; i < moveHistory.length; i++) {
 		if (moveHistory[i] !== moveSequence[i]) {
-			//console.log("moveHistory: " + moveHistory[i] + ", moveSequence: " + moveSequence[i]);
 			return "invalid";
 		} else {
-			// console.log("Next move: " + moveSequence[j]);
 			return moveSequence[j];
 		}
     }

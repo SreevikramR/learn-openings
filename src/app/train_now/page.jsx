@@ -9,7 +9,7 @@ import ruyLopez from "../../../public/ruy-lopez.png"
 import PopUp from '@/components/popUp/PopUp'
 
 const TrainPick = () => {
-	const {setPopUpType, setAllOpenings, allOpenings, openingName, setOpeningName, setOpeningLine, setLineVariations, setPlayerColor} = useChessboard()
+	const {setPopUpType, setAllOpenings, setOpeningName, setOpeningLine, setLineVariations, setPlayerColor} = useChessboard()
 	const [tiles, setTiles] = useState()
 
 	useEffect(() => {
