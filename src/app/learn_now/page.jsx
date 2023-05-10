@@ -3,13 +3,13 @@ import NavbarComponent from '@/components/navbar/Navbar'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useChessboard } from '@/context/BoardContext'
-import { getAllOpenings } from '../api/firebaseAccess'
+import { getAllOpenings, setFirstLine, getLines, readOpening, getMoveSequence } from '../api/firebaseAccess'
 import styles from "@/app/styles/openingTiles.module.css"
 import ruyLopez from "../../../public/ruy-lopez.png"
 import PopUp from '@/components/popUp/PopUp'
 
 const LearnPick = () => {
-	const { setAllOpenings, allOpenings, openingName, setOpeningName, setPopUpType} = useChessboard()
+	const { setAllOpenings, allOpenings, openingName, openingLine, setOpeningName, setPopUpType, setOpeningLine, setLineVariations, setPlayerColor, setMoveSequence, moveSequence} = useChessboard()
 	const [tiles, setTiles] = useState()
 
 	useEffect(() => {
@@ -28,7 +28,7 @@ const LearnPick = () => {
 	async function setTileData(openingsList) {
 		let tempTiles = []
 		let numItemsPerRow = Math.floor(window.innerWidth / 360)
-		let imgWidth = Math.floor(window.innerWidth / numItemsPerRow) - (Math.floor(window.innerWidth / numItemsPerRow) * 0.4)
+		let imgWidth = Math.floor(window.innerWidth / numItemsPerRow) * 0.6
 		let numRows = Math.ceil(openingsList.length / numItemsPerRow)
 		let row = [];
 
@@ -60,8 +60,18 @@ const LearnPick = () => {
 	}
 
 	async function handleTileClick(opening) {
-		console.log(opening)
 		setOpeningName(opening)
+		openPopUp()
+		await readOpening(opening)
+		await setOpeningLine(await setFirstLine(opening))
+		await setLineVariations(await getLines())
+		await setPlayerColor("white")
+		let tempMoveSequence = await getMoveSequence(openingLine)
+		await setMoveSequence(tempMoveSequence)
+		console.log(moveSequence)
+	}
+
+	function openPopUp() {
 		var modal = document.getElementById("modal");
 		var span = document.getElementById("close");
 		modal.style.display = "block";
@@ -69,10 +79,10 @@ const LearnPick = () => {
 			modal.style.display = "none";
 		})
 		window.addEventListener('click', ()=> {
-            if (event.target == modal) {
+			if (event.target == modal) {
 				modal.style.display = "none";
 			}
-        })
+		})
 	}
 
 	const _learn = () => {

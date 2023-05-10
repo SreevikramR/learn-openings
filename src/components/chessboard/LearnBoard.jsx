@@ -1,4 +1,4 @@
-import { useChessboard } from "../../contexts/BoardContext";
+import { useChessboard } from "@/context/BoardContext";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import MoveSelector from "../../scripts/MoveSelector";
@@ -10,7 +10,7 @@ let arrowArray = []
 let playedFirstMove = false;
 
 const LearnBoard = () => {
-	const {moveHistory, setMoveHistory, openingLine, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, setPlayerColor} = useChessboard()
+	const {moveHistory, setMoveHistory, openingLine, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor} = useChessboard()
 
 	tempMoveHistory = moveHistory;
 
@@ -30,10 +30,10 @@ const LearnBoard = () => {
 			getExpectedMove()
 		}
 		window.addEventListener('resize', ()=> {
-            if (viewPortWidth / 2 > 500) {
+            if (window.innerWidth / 2 > 500) {
 				setBoardWidth(500);
 			} else {
-				setBoardWidth(viewPortWidth / 2.2);
+				setBoardWidth(window.innerWidth / 2.2);
 			}
         })
 	}, []);
@@ -44,7 +44,7 @@ const LearnBoard = () => {
 		const gameCopy = game;
 		gameCopy.loadPgn(game.pgn());
 		//console.log(move)
-		console.log(moveSequence)
+		//console.log(moveSequence)
 		await gameCopy.move(moveSequence[0]);
 		await setGame(gameCopy);
 		await setPosition(game.fen());

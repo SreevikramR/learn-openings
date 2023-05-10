@@ -17,7 +17,7 @@ const TrainPage = () => {
         setMoveHistory([]);
         setOpeningComplete(false);
     }, [openingName, openingLine, setMoveSequence, setMoveHistory, setOpeningComplete]);
-    
+
     useEffect(() => {
         setMoveHistory([]);
     }, []);
