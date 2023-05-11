@@ -94,7 +94,7 @@ const RegisterForm = () => {
         <>
             <form className="flex flex-col text-2xl w-1/4">
                 <div id='errorBox' className="place-content-center w-full p-3 bg-red-600 mb-4 text-xl border-2 border-red-600 rounded-md hidden">
-                    <text>{errorMessage}</text>
+                    <div>{errorMessage}</div>
                 </div>
                 <div className="flex flex-row">
                     <div className="flex flex-col w-1/2 pr-2">
