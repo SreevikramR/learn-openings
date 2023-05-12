@@ -1,14 +1,12 @@
 "use client"
 import { useChessboard } from "@/context/BoardContext"
-import { getMoveSequence, readOpening, setFirstLine, getLines } from "../api/firebaseAccess"
-import React, { useEffect } from "react"
+import React from "react"
 import NavbarComponent from "@/components/navbar/Navbar"
-import TrainBoard from "@/components/chessboard/TrainBoard"
 import MoveTable from "@/components/moveTable/MoveTable"
 import LearnBoard from "@/components/chessboard/LearnBoard"
 
 function TrialPage() {
-    const {setMoveHistory, setPlayerColor, setOpeningLine, openingName, setOpeningName, setMoveSequence, setLineVariations} = useChessboard();
+    const {openingName} = useChessboard();
 
     return(
         <>

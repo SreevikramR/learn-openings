@@ -2,21 +2,19 @@ import { auth, db } from "@/firebase";
 import { getDoc, doc, setDoc, collection, getDocs } from "firebase/firestore";
 
 let firstName = null;
+let loggedInUser = null;
 let openings = [];
 let openingData = [];
 let previousOpeningName;
 let openingLines;
 
-export async function getData() {
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    return await getDoc(docRef);
-}
-
 export async function getfName() {
-    if (firstName == null) {
-        const packet = await getData();
+    if (loggedInUser != auth.currentUser.uid) {
+        const docRef = doc(db, "users", auth.currentUser.uid);
+        const packet = await getDoc(docRef);
         const data = packet.data().fName;
         firstName = data;
+        loggedInUser = auth.currentUser.uid;
         return firstName;
     } else {
         return firstName;
@@ -33,12 +31,6 @@ export async function checkUsernameExists(username) {
     }
 }
 
-export async function addUsername(username) {
-    await setDoc(doc(db, "usernames", username), {
-        uid: auth.currentUser.uid,
-    });
-}
-
 export async function createUser(firstName, lastName, username) {
     await setDoc(doc(db, "users", auth.currentUser.uid), {
         fName: firstName,
@@ -46,23 +38,9 @@ export async function createUser(firstName, lastName, username) {
         uid: auth.currentUser.uid,
         username: username,
     });
-}
-
-export async function readOpening(openingName){
-    if(previousOpeningName == openingName){
-        return
-    } else {
-        openingData = []
-        //console.log(openingData)
-    
-        const docRef = doc(db, "openings", openingName);
-        const packet = await getDoc(docRef);
-        openingData = packet.data()
-    
-        openingLines = Object.keys(openingData).sort()
-        console.log(openingLines)
-        previousOpeningName = openingName
-    }
+    await setDoc(doc(db, "usernames", username), {
+        uid: auth.currentUser.uid,
+    });
 }
 
 export async function getLines(){
@@ -71,7 +49,18 @@ export async function getLines(){
     return lines;
 }
 
-export async function setFirstLine(){
+export async function setFirstLine(openingName){
+    if(previousOpeningName == openingName){
+        return openingLines[0]
+    } else {
+        const docRef = doc(db, "openings", openingName);
+        const packet = await getDoc(docRef);
+        openingData = packet.data()
+    
+        openingLines = Object.keys(openingData).sort()
+        console.log(openingLines)
+        previousOpeningName = openingName
+    }
     return openingLines[0]
 }
 
@@ -81,14 +70,8 @@ export function getMoveSequence(openingLine){
 }
 
 export async function getAlternateLine(currentLine) {
-    if(openingData == undefined) {
-        await readOpening("Ruy Lopez")
-    } else if (previousOpeningName != "Ruy Lopez"){
-        await readOpening("Ruy Lopez")
-    }
     let foundLine = false;
         while (foundLine === false) {
-        //console.log("finding")
         let index = Math.round(randomNumber(openingLines.length - 1));
         if (openingLines[index] != currentLine) {
             return openingLines[index];
@@ -100,7 +83,6 @@ export async function getAllOpenings(){
     const querySnapshot = await getDocs(collection(db, "openings"));
     openings = []
     querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
         openings.push(doc.id)
     });
     return openings

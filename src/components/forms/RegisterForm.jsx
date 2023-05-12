@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, setPersistence, browserSessionPersistence, updateProfile } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { useRouter } from 'next/navigation';
-import { checkUsernameExists, addUsername, createUser } from '@/app/api/firebaseAccess';
+import { checkUsernameExists, createUser } from '@/app/api/firebaseAccess';
 
 const RegisterForm = () => {
     const [email, setEmail] = useState("")
@@ -53,7 +53,6 @@ const RegisterForm = () => {
                     );
                     console.log("user: " + auth.currentUser);
                     await createUser(fName, lName, username);
-                    await addUsername(username);
                     router.push("/dashboard");
                 } catch (error) {
                     document.getElementById("errorBox").style.display = "flex";

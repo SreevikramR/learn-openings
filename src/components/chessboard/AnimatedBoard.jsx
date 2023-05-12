@@ -2,7 +2,7 @@
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { useEffect, useState } from "react";
-import { getAlternateLine, getMoveSequence, readOpening, setFirstLine } from "@/app/api/firebaseAccess";
+import { getAlternateLine, getMoveSequence, setFirstLine } from "@/app/api/firebaseAccess";
 
 let firstRun = true;
 
@@ -39,8 +39,7 @@ const AnimatedBoard = () => {
     async function playMoves () {
         if (firstRun) {
             firstRun = false;
-            await readOpening("Ruy Lopez"); // change to picking a random opening
-            openingVariation = await setFirstLine();
+            openingVariation = await setFirstLine("Ruy Lopez");
         }
         const gameCopy = new Chess();
         game.loadPgn(gameCopy.pgn());
