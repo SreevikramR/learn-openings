@@ -2,14 +2,12 @@
 import React, { useState } from 'react'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '@/firebase'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import AnimatedBoard from '@/components/chessboard/AnimatedBoard'
 
 export default function Home() {
+
 	return (
 		<>
 			<NavbarComponent />

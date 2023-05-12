@@ -3,8 +3,6 @@ import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { useEffect, useState } from "react";
 import { getAlternateLine, getMoveSequence, readOpening, setFirstLine } from "@/app/api/firebaseAccess";
-import { storage } from "@/firebase";
-import { getDownloadURL, ref } from "firebase/storage";
 
 let firstRun = true;
 
@@ -21,13 +19,6 @@ const AnimatedBoard = () => {
         playMoves();
         window.addEventListener('resize', ()=> {
             setBoardWidth(window.innerWidth / 3);
-        })     
-        const pictureRef = ref(storage, '/ruy-lopez.png')
-    
-        getDownloadURL(pictureRef).then((url) => {
-            console.log(url)
-        }).catch((error) => {
-            console.log(error)
         })
     }, []);
 

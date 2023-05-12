@@ -152,7 +152,7 @@ const RegisterForm = () => {
                 />
                 <button onClick={handleSubmit} disabled={loading} className="bg-blue-700 border-2 border-blue-700 text-white py-2 px-4 rounded-lg mt-10 mb-3 hover:border-white disabled:bg-blue-500">Register</button>
             </form>
-            <text className="mb-5 font-semibold text-lg">Have an Account?<span className="text-blue-500 cursor-pointer" onClick={() => router.push("/login")}> Login</span></text>
+            <div className="mb-5 font-semibold text-lg">Have an Account?<span className="text-blue-500 cursor-pointer" onClick={() => router.push("/login")}> Login</span></div>
         </>
     )
 }

@@ -9,7 +9,7 @@ import ruyLopez from "../../../public/ruy-lopez.png"
 import PopUp from '@/components/popUp/PopUp'
 
 const LearnPick = () => {
-	const { setAllOpenings, allOpenings, openingName, openingLine, setOpeningName, setPopUpType, setOpeningLine, setLineVariations, setPlayerColor, setMoveSequence, moveSequence} = useChessboard()
+	const { setAllOpenings, openingLine, setOpeningName, setPopUpType, setOpeningLine, setLineVariations, setPlayerColor, setMoveSequence, moveSequence} = useChessboard()
 	const [tiles, setTiles] = useState()
 
 	useEffect(() => {
