@@ -1,6 +1,7 @@
 import NavbarComponent from '@/components/navbar/Navbar'
 import Link from 'next/link'
 import AnimatedBoard from '@/components/chessboard/AnimatedBoard'
+import TrialPageInit from '@/scripts/TrialPageInit'
 
 export default function Home() {
 
@@ -18,6 +19,7 @@ export default function Home() {
 					<br/><div className="mt-4"><Link href="/try_now"><span className="text-3xl font-bold text-white border-4 border-blue-600 bg-blue-600 hover:border-white px-4 m-4 py-3 rounded-2xl hover:cursor-pointer"> Try Now! </span></Link></div>
 				</div>
 			</main>
+			<TrialPageInit />
 		</>
 	)
 }

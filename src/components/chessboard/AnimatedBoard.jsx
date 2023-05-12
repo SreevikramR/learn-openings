@@ -40,7 +40,7 @@ const AnimatedBoard = () => {
         if (firstRun) {
             firstRun = false;
             await readOpening("Ruy Lopez"); // change to picking a random opening
-            openingVariation = await setFirstLine("Ruy Lopez");
+            openingVariation = await setFirstLine();
         }
         const gameCopy = new Chess();
         game.loadPgn(gameCopy.pgn());
