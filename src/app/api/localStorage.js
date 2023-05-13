@@ -1,10 +1,10 @@
 "use client"
 
-export async function storeLocalData(key, value){
+export async function storeDataLocal(key, value){
     localStorage.setItem(key, JSON.stringify(value))
 }
 
-export function getLocalStorage(key){
+export function getDataLocal(key){
     let localResult = localStorage.getItem(key);
     if(localResult == null){
         return false

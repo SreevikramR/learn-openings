@@ -41,9 +41,9 @@ const Dashboard = () => {
 					<div className="w-1/2 col-span-1 relative justify-center flex mt-5 h-full">
 						<div className="w-3/5 border-2 rounded-xl border-zinc-800 flex flex-col items-center pt-14 hover:border-blue-600" onClick={() => {router.push("/learn_now")}}>
 							<Image src={learn} height={learnImgW} alt='learn'/>
-							<text className="mt-6 italic text-3xl">
+							<span className="mt-6 italic text-3xl">
 								Learn
-							</text>
+							</span>
 						</div>
 						{/* <span>
 							Left
@@ -52,9 +52,9 @@ const Dashboard = () => {
 					<div className="w-1/2 col-span-1 relative justify-center flex mt-5 h-full">
 						<div className="w-3/5 border-2 rounded-xl border-zinc-800 flex flex-col items-center pt-12 hover:border-blue-600" onClick={() => {router.push("/train_now")}}>
 							<Image src={train} height={trainImgW} alt='train'/>
-							<text className="mt-4 italic text-3xl">
+							<span className="mt-4 italic text-3xl">
 								Practice
-							</text>
+							</span>
 						</div>
 					</div>
 				</main>

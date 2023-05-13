@@ -12,15 +12,11 @@ const NavbarComponent = () => {
 
 	useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
-			console.log("auth triggered")
 			if(stateChanging) return;
 			stateChanging = true;
 			if (user) {
-				console.log("logged in")
 				setIsLoggedIn(true)
 				setFirstName()
-			} else {
-				console.log("not logged in")
 			}
 			stateChanging = false;
 		});

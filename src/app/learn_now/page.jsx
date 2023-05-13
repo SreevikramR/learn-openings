@@ -68,7 +68,6 @@ const LearnPick = () => {
 		await setPlayerColor("white")
 		let tempMoveSequence = await getMoveSequence(openingLine)
 		await setMoveSequence(tempMoveSequence)
-		console.log(moveSequence)
 	}
 
 	function openPopUp() {

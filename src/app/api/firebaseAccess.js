@@ -1,5 +1,6 @@
 import { auth, db } from "@/firebase";
 import { getDoc, doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { getDataLocal, storeDataLocal } from "./localStorage";
 
 let firstName = null;
 let loggedInUser = null;
@@ -7,6 +8,7 @@ let openings = [];
 let openingData = [];
 let previousOpeningName;
 let openingLines;
+let lastChecked = 0;
 
 export async function getfName() {
     if (loggedInUser != auth.currentUser.uid) {
@@ -45,20 +47,24 @@ export async function createUser(firstName, lastName, username) {
 
 export async function getLines(){
     const lines = openingLines
-    console.log(lines)
     return lines;
 }
 
 export async function setFirstLine(openingName){
+    await versionControl();
     if(previousOpeningName == openingName){
         return openingLines[0]
+    } else if(getDataLocal(openingName + "Data") !== false) {
+        openingData = getDataLocal(openingName + "Data")
+        openingLines = Object.keys(openingData).sort()
+        previousOpeningName = openingName
     } else {
         const docRef = doc(db, "openings", openingName);
         const packet = await getDoc(docRef);
         openingData = packet.data()
-    
+        storeDataLocal(openingName + "Data", openingData)
+
         openingLines = Object.keys(openingData).sort()
-        console.log(openingLines)
         previousOpeningName = openingName
     }
     return openingLines[0]
@@ -80,14 +86,36 @@ export async function getAlternateLine(currentLine) {
 }
 
 export async function getAllOpenings(){
-    const querySnapshot = await getDocs(collection(db, "openings"));
-    openings = []
-    querySnapshot.forEach((doc) => {
-        openings.push(doc.id)
-    });
+    await versionControl();
+    if(getDataLocal("allOpenings") !== false){
+        openings = getDataLocal("allOpenings")
+    } else {
+        const querySnapshot = await getDocs(collection(db, "openings"));
+        openings = []
+        querySnapshot.forEach((doc) => {
+            openings.push(doc.id)
+        });
+        storeDataLocal("allOpenings", openings)
+    }
     return openings
 }
 
 function randomNumber(max) {
     return Math.random() * max;
+}
+
+async function versionControl() {
+    if(lastChecked + 600000 < Date.now()){ //Longer than 10 minutes
+        lastChecked = Date.now();
+        const docRef = doc(db, "cacheControl", "cacheVersion");
+        const packet = await getDoc(docRef);
+        const data = packet.data().versionCode;
+        if(data == getDataLocal("cacheVersion")){
+            return
+        } else {
+            localStorage.clear()
+            storeDataLocal("cacheVersion", data)
+            return
+        }
+    }
 }
