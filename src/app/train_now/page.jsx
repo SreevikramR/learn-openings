@@ -7,6 +7,7 @@ import { getAllOpenings, getLines, setFirstLine } from '../api/firebaseAccess'
 import styles from "@/app/styles/openingTiles.module.css"
 import ruyLopez from "../../../public/ruy-lopez.png"
 import PopUp from '@/components/popUp/PopUp'
+import PageWrapper from '@/components/wrapper/pageWrapper'
 
 const TrainPick = () => {
 	const {setPopUpType, setAllOpenings, setOpeningName, setOpeningLine, setLineVariations, setPlayerColor} = useChessboard()
@@ -28,7 +29,7 @@ const TrainPick = () => {
 	async function setTileData(openingsList) {
 		let tempTiles = []
 		let numItemsPerRow = Math.floor(window.innerWidth / 360)
-		let imgWidth = Math.floor(window.innerWidth / numItemsPerRow) - (Math.floor(window.innerWidth / numItemsPerRow) * 0.4)
+		let imgWidth = 216
 		let numRows = Math.ceil(openingsList.length / numItemsPerRow)
 		let row = [];
 
@@ -92,12 +93,14 @@ const TrainPick = () => {
 
 	return (
 		<>
-			<PopUp/>
-			<NavbarComponent/>
-			<div className="flex justify-center">
-				<span className="text-4xl font-bold">Pick Opening to Train</span>
-			</div>
-			<_train/>
+			<PageWrapper>
+				<PopUp/>
+				<NavbarComponent/>
+				<div className="flex justify-center">
+					<span className="text-4xl font-bold">Pick Opening to Train</span>
+				</div>
+				<_train/>
+			</PageWrapper>
 		</>
 	)
 }

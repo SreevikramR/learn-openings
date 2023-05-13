@@ -1,12 +1,18 @@
 "use client"
 import { useChessboard } from "@/context/BoardContext"
-import React from "react"
+import React, { useEffect } from "react"
 import NavbarComponent from "@/components/navbar/Navbar"
 import MoveTable from "@/components/moveTable/MoveTable"
 import LearnBoard from "@/components/chessboard/LearnBoard"
 
 function TrialPage() {
-    const {openingName} = useChessboard();
+    const {openingName, openingLine} = useChessboard();
+
+    useEffect(() => {
+        if(openingLine === "") {
+            window.location.href = "/"
+        }
+    }, [])
 
     return(
         <>
@@ -23,7 +29,7 @@ function TrialPage() {
                     </div>
                     <MoveTable />
                 </div>
-		    </main>
+            </main>
         </>
     )
 }

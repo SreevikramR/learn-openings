@@ -7,6 +7,7 @@ import { getAllOpenings, setFirstLine, getLines, getMoveSequence } from '../api/
 import styles from "@/app/styles/openingTiles.module.css"
 import ruyLopez from "../../../public/ruy-lopez.png"
 import PopUp from '@/components/popUp/PopUp'
+import PageWrapper from '@/components/wrapper/pageWrapper'
 
 const LearnPick = () => {
 	const { setAllOpenings, openingLine, setOpeningName, setPopUpType, setOpeningLine, setLineVariations, setPlayerColor, setMoveSequence, moveSequence} = useChessboard()
@@ -28,7 +29,7 @@ const LearnPick = () => {
 	async function setTileData(openingsList) {
 		let tempTiles = []
 		let numItemsPerRow = Math.floor(window.innerWidth / 360)
-		let imgWidth = Math.floor(window.innerWidth / numItemsPerRow) * 0.6
+		let imgWidth = 216
 		let numRows = Math.ceil(openingsList.length / numItemsPerRow)
 		let row = [];
 
@@ -94,12 +95,14 @@ const LearnPick = () => {
 
 	return (
 		<>
-			<PopUp/>
-			<NavbarComponent/>
-			<div className="flex justify-center">
-				<span className="text-4xl font-bold">Pick Opening to Learn</span>
-			</div>
-			<_learn/>
+			<PageWrapper>
+				<PopUp/>
+				<NavbarComponent/>
+				<div className="flex justify-center">
+					<span className="text-4xl font-bold">Pick Opening to Learn</span>
+				</div>
+				<_learn/>
+			</PageWrapper>
 		</>
 	)
 }

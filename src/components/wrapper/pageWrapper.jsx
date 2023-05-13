@@ -1,4 +1,3 @@
-"use client"
 import React, { useEffect, useState } from 'react'
 import { auth } from '@/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -22,7 +21,6 @@ const PageWrapper = ({ children }) => {
 		});
 	}, [])
 
-
 	if (isloggedIn) {
 		return (
 			<>
@@ -33,7 +31,6 @@ const PageWrapper = ({ children }) => {
 		return (
 			<>
 				<NavbarComponent />
-				<div>Please log in to view this page</div>
 			</>
 		)
 	}

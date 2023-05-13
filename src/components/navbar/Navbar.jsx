@@ -37,9 +37,11 @@ const NavbarComponent = () => {
 							Register
 						</span>
 					</Link>
-					<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded-xl border-2 border-blue-700 text-white font-bold items-center justify-center hover:border-white hover:text-white text-xl hover:cursor-pointer bg-blue-600'>
-					Try Now!
-					</span>
+					<Link href="/try_now">
+						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded-xl border-2 border-blue-700 text-white font-bold items-center justify-center hover:border-white hover:text-white text-xl hover:cursor-pointer bg-blue-600'>
+						Try Now!
+						</span>
+					</Link>
 				</div>
 			</div>
 		)
