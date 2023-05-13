@@ -3,11 +3,11 @@ import NavbarComponent from '@/components/navbar/Navbar'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useChessboard } from '@/context/BoardContext'
-import { getAllOpenings, setFirstLine, getLines, getMoveSequence } from '../api/firebaseAccess'
+import { getAllOpenings, setFirstLine, getLines, getMoveSequence, getImageURL } from '../api/firebaseAccess'
 import styles from "@/app/styles/openingTiles.module.css"
-import ruyLopez from "../../../public/ruy-lopez.png"
 import PopUp from '@/components/popUp/PopUp'
 import PageWrapper from '@/components/wrapper/pageWrapper'
+import { getOpeningsData } from '../api/firebaseAccess'
 
 const LearnPick = () => {
 	const { setAllOpenings, openingLine, setOpeningName, setPopUpType, setOpeningLine, setLineVariations, setPlayerColor, setMoveSequence, moveSequence} = useChessboard()
@@ -27,12 +27,18 @@ const LearnPick = () => {
 	}
 
 	async function setTileData(openingsList) {
+		let openingsData = await getOpeningsData();
+		let imgURLs = []
 		let tempTiles = []
 		let numItemsPerRow = Math.floor(window.innerWidth / 360)
 		let imgWidth = 216
 		let numRows = Math.ceil(openingsList.length / numItemsPerRow)
 		let row = [];
-
+		for(let i=0; i < openingsList.length; i++) {
+			let opening = openingsList[i]
+			let imgURL = await getImageURL(openingsData[opening].imgName)
+			imgURLs.push(imgURL)
+		}
 
 		for(let i=0; i < numRows; i++) {
 			for(let j=0; j < numItemsPerRow; j++) {
@@ -43,7 +49,7 @@ const LearnPick = () => {
 				let opening = openingsList[itemIndex]
 				let _openingBlock = (
 					<div key={opening} className={styles.openingBlock} onClick={() => {handleTileClick(opening)}}>
-						<Image src={ruyLopez} alt="Ruy Lopez" width={imgWidth} height={imgWidth} className="self-center rounded-md"/>
+						<Image src={imgURLs[itemIndex]} alt="Ruy Lopez" width={imgWidth} height={imgWidth} className="self-center rounded-md"/>
 						<span className="text-white italic text-2xl pt-2">{opening}</span>
 					</div>
 				)

@@ -1,5 +1,6 @@
-import { auth, db } from "@/firebase";
+import { auth, db, storage } from "@/firebase";
 import { getDoc, doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { getDataLocal, storeDataLocal } from "./localStorage";
 
 let firstName = null;
@@ -100,6 +101,23 @@ export async function getAllOpenings(){
     return openings
 }
 
+export async function getOpeningsData() {
+    await versionControl();
+    if(getDataLocal("openingsData") !== false){
+        let openingsData;
+        openingsData = getDataLocal("openingsData")
+        return openingsData
+    } else {
+        const querySnapshot = await getDocs(collection(db, "openingsData"));
+        let openingsData = {};
+        querySnapshot.forEach((doc) => {
+            openingsData[doc.id] = doc.data()
+        })
+        storeDataLocal("openingsData", openingsData)
+        return openingsData
+    }
+}
+
 function randomNumber(max) {
     return Math.random() * max;
 }
@@ -111,11 +129,16 @@ async function versionControl() {
         const packet = await getDoc(docRef);
         const data = packet.data().versionCode;
         if(data == getDataLocal("cacheVersion")){
-            return
+            return false
         } else {
             localStorage.clear()
             storeDataLocal("cacheVersion", data)
-            return
+            return true
         }
     }
+}
+
+export async function getImageURL(imgName) {
+    const url = await getDownloadURL(ref(storage, imgName));
+    return url;
 }
