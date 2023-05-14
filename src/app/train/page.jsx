@@ -50,7 +50,7 @@ const TrainPage = () => {
                         <MoveTable />
                     </div>
                 </div>
-                <button onClick={changeLine}>Try another line!</button>
+                {/* <button onClick={changeLine}>Try another line!</button> */}
             </PageWrapper>
         </>
     )
