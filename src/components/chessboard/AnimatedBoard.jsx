@@ -15,10 +15,22 @@ const AnimatedBoard = () => {
     let openingVariation;
 
     useEffect(() => {
-        setBoardWidth(window.innerWidth / 3);
+        if(window.innerWidth < 450) {
+            setBoardWidth(window.innerWidth / 1.5);
+        } else if(window.innerWidth < 850) {
+            setBoardWidth(window.innerWidth / 2.25);
+        } else {
+            setBoardWidth(window.innerWidth / 3);
+        }
         playMoves();
         window.addEventListener('resize', ()=> {
-            setBoardWidth(window.innerWidth / 3);
+            if(window.innerWidth < 450) {
+                setBoardWidth(window.innerWidth / 1.5);
+            } else if(window.innerWidth < 850) {
+                setBoardWidth(window.innerWidth / 2.25);
+            } else {
+                setBoardWidth(window.innerWidth / 3);
+            }
         })
     }, []);
 
