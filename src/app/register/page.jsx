@@ -6,7 +6,7 @@ function RegisterPage() {
         <>
             <NavbarComponent />
             <main className="flex flex-col columns-1 justify-center align-middle items-center w-full">
-                <div className="text-white text-4xl font-semibold mb-6">Register</div>
+                <div className="text-white lg:text-4xl text-3xl font-semibold mb-6">Register</div>
                 <RegisterForm />
             </main>
         </>

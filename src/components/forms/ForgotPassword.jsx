@@ -53,7 +53,7 @@ const ForgotPassword = () => {
 
     return (
         <>
-            <form className="flex flex-col text-2xl w-1/4">
+            <form className="flex flex-col lg:text-2xl text-xl lg:w-1/4 w-1/2">
                 <div id='errorBox' className="place-content-center w-full p-3 bg-red-600 mb-4 text-xl border-2 border-red-600 rounded-md hidden">
                     <div>{errorMessage}</div>
                 </div>
