@@ -15,7 +15,7 @@
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
     "firebase": "^9.19.1",
-    "next": "^13.4.1",
+    "next": "^13.4.2",
     "postcss": "8.4.21",
     "react": "18.2.0",
     "react-chessboard": "^2.1.2",

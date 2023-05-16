@@ -4,10 +4,13 @@ import Link from 'next/link'
 import { auth } from '@/firebase'
 import { getfName } from '@/app/api/firebaseAccess'
 import { onAuthStateChanged } from 'firebase/auth'
+import { useRouter } from 'next/navigation'
 
-const NavbarComponent = () => {
+const NavbarComponent = ({ fixed }) => {
+	const router = useRouter()
 	const [name, setName] = useState('')
 	const [isLoggedIn, setIsLoggedIn] = useState(false)
+	const [navbarOpen, setNavbarOpen] = useState(false)
 	let stateChanging = false;
 
 	useEffect(() => {
@@ -20,7 +23,13 @@ const NavbarComponent = () => {
 			}
 			stateChanging = false;
 		});
+		console.log(isLoggedIn)
 	}, [])
+
+	const handleSignOut = () => {
+		auth.signOut()
+		router.push("/")
+	}
 
 
 	const notLoggedIn = () => {
@@ -76,14 +85,87 @@ const NavbarComponent = () => {
 
 	const navbar = () => {
 		return (
+			// <>
+			// 	<nav className='flex items-center flex-wrap bg-black p-3 pt-2 border-b-2 mb-4 border-b-zinc-900'>
+			// 		<Link href='/'>
+			// 			<span className='sm:text-m lg:text-4xl text-white font-semibold tracking-wide'>
+			// 				Chess Openings
+			// 			</span>
+			// 		</Link>
+			// 		<RightSide />
+			// 	</nav>
+			// </>
+
 			<>
-				<nav className='flex items-center flex-wrap bg-black p-3 pt-2 border-b-2 mb-4 border-b-zinc-900'>
-					<Link href='/'>
-						<span className='sm:text-m lg:text-4xl text-white font-semibold tracking-wide'>
-							Chess Openings
-						</span>
-					</Link>
-					<RightSide />
+				<nav className="relative flex flex-wrap items-center justify-between px-2 py-2 mb-4 border-b-2 border-b-zinc-900">
+					<div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+						<div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
+							<button className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none" type="button" onClick={() => setNavbarOpen(!navbarOpen)}>
+								<i className="fas fa-bars"></i>
+							</button>
+							<a className="text-base lg:text-4xl font-semibold leading-relaxed hidden lg:inline-block mr-4 py-2 whitespace-nowrap text-white" href="/">
+								Chess Openings
+							</a>
+							<a className={"text-xl font-semibold leading-relaxed lg:hidden inline-block mr-4 py-2 whitespace-nowrap text-white" + (isLoggedIn ? " hidden" : " inline-block")} href="/login">
+								Login
+							</a>
+							<a className={"text-xl font-semibold leading-relaxed lg:hidden mr-4 py-2 whitespace-nowrap text-white" + (isLoggedIn ? " inline-block" : " hidden")} href="/">
+								Hi {name}
+							</a>
+						</div>
+
+						<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossOrigin="anonymous"/>
+
+						<div className={"lg:" + (isLoggedIn ? "hidden" : "flex") +  " flex-grow items-center" + (navbarOpen ? " flex" : " hidden")} id="example-navbar-danger">
+							<ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+								<li className={"nav-item" + (isLoggedIn ? " hidden" : " flex")}>
+									<a className="px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900" href="/login">
+										<span className='mx-1'>Login</span>
+									</a>
+								</li>
+								<li className={"nav-item" + (isLoggedIn ? " hidden" : " flex")}>
+									<a className="px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900" href="/login">
+										<span className="mx-1">Register</span>
+									</a>
+								</li>
+								<li className={"nav-item py-3 lg:py-0" + (isLoggedIn ? " hidden" : " flex")}>
+									<Link href="/try_now">
+										<span className='lg:inline-flex lg:w-auto px-1 lg:m-0 py-2 w-full lg:px-3 lg:py-2 rounded-xl border-2 border-blue-700 text-white font-bold items-center justify-center hover:border-white hover:text-white text-xl hover:cursor-pointer bg-blue-600'>
+											<span className='mx-1'>
+												Try Now!
+											</span>
+										</span>
+									</Link>
+								</li>
+
+								<li className={"nav-item" + (!isLoggedIn ? " hidden" : " flex")}>
+									<Link href="/dashboard">
+										<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900">Dashboard</span>
+									</Link>
+								</li>
+								<li className={"nav-item" + (!isLoggedIn ? " hidden" : " flex")} onClick={handleSignOut}>
+									<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900">Sign Out</span>
+								</li>
+							</ul>
+						</div>
+
+						<div className={"lg:" + (isLoggedIn ? "flex" : "hidden") + " flex-grow items-center hidden"} id="example-navbar-danger">
+							<ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+								<li className="nav-item">
+									<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white pointer-none lg:border-l-2 lg:border-l-zinc-900">Hi {name}</span>
+								</li>
+								<li className="nav-item py-3 lg:py-0">
+									<Link href="/dashboard">
+										<span className='lg:inline-flex lg:w-auto px-1 lg:m-0 py-2 w-full lg:px-3 lg:py-2 rounded-xl border-2 border-blue-700 text-white font-bold items-center justify-center hover:border-white hover:text-white text-xl hover:cursor-pointer bg-blue-600'>
+											<span className='mx-1'>
+												Dashboard
+											</span>
+										</span>
+									</Link>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</nav>
 			</>
 		)
