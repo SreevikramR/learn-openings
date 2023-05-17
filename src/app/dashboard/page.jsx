@@ -15,11 +15,27 @@ const Dashboard = () => {
 
 	useEffect(() => {
         window.addEventListener('resize', ()=> {
-            setLearnImgW(window.innerWidth / 8);
-			setTrainImgW(window.innerWidth / 7);
+			if(window.innerWidth < 780) {
+				setLearnImgW(window.innerWidth / 5);
+				setTrainImgW(window.innerWidth / 4);
+			} else if (window.innerWidth < 1024) {
+				setLearnImgW(window.innerWidth / 6);
+				setTrainImgW(window.innerWidth / 5);
+			} else {
+				setLearnImgW(window.innerWidth / 8);
+				setTrainImgW(window.innerWidth / 7);
+			}
         })
-		setLearnImgW(window.innerWidth / 8);
-		setTrainImgW(window.innerWidth / 7);
+		if(window.innerWidth < 780) {
+			setLearnImgW(window.innerWidth / 5);
+			setTrainImgW(window.innerWidth / 4);
+		} else if(window.innerWidth < 1024) {
+			setLearnImgW(window.innerWidth / 6);
+			setTrainImgW(window.innerWidth / 5);
+		} else {
+			setLearnImgW(window.innerWidth / 8);
+			setTrainImgW(window.innerWidth / 7);
+		}
     }, []);
 
 	const handleSignOut = () => {
@@ -32,27 +48,24 @@ const Dashboard = () => {
 			<PageWrapper>
 				<NavbarComponent />
 				<div className="flex justify-center">
-					<span className="text-5xl font-bold">Dashboard</span>
+					<span className="lg:text-5xl text-3xl font-bold">Dashboard</span>
 				</div>
-				<div className="flex justify-center mt-3 mb-6">
-					<span className="text-3xl italic">What would you like to do today?</span>
+				<div className="flex justify-center lg:mt-3 lg:mb-6 mt-1">
+					<span className="lg:text-3xl md:text-2xl text-lg italic text-center">What would you like to do today?</span>
 				</div>
-				<main className="flex flex-row columns-2 justify-center align-middle items-center w-full h-1/2">
-					<div className="w-1/2 col-span-1 relative justify-center flex mt-5 h-full">
+				<main className="flex lg:flex-row lg:columns-2 flex-col justify-center align-middle items-center w-full h-fit">
+					<div className="lg:w-1/2 md:w-3/4 w-full col-span-1 relative justify-center flex mt-5 h-full flex-wrap">
 						<div className="w-3/5 border-2 rounded-xl border-zinc-800 flex flex-col items-center pt-14 hover:border-blue-600" onClick={() => {router.push("/learn_now")}}>
 							<Image src={learn} height={learnImgW} alt='learn'/>
-							<span className="mt-6 italic text-3xl">
+							<span className="mt-6 italic text-3xl mb-6 pb-7 font-semibold">
 								Learn
 							</span>
 						</div>
-						{/* <span>
-							Left
-						</span> */}
 					</div>
-					<div className="w-1/2 col-span-1 relative justify-center flex mt-5 h-full">
+					<div className="lg:w-1/2 md:w-3/4 w-full col-span-1 relative justify-center flex mt-5 h-full">
 						<div className="w-3/5 border-2 rounded-xl border-zinc-800 flex flex-col items-center pt-12 hover:border-blue-600" onClick={() => {router.push("/train_now")}}>
 							<Image src={train} height={trainImgW} alt='train'/>
-							<span className="mt-4 italic text-3xl">
+							<span className="mt-4 italic text-3xl mb-6 pb-7 font-semibold">
 								Practice
 							</span>
 						</div>

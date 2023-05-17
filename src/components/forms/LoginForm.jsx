@@ -1,6 +1,6 @@
 "use client"
-import React, { useState } from 'react'
-import { setPersistence, browserSessionPersistence, signInWithEmailAndPassword } from 'firebase/auth'
+import React, { useEffect, useState } from 'react'
+import { setPersistence, browserSessionPersistence, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -11,6 +11,14 @@ const LoginForm = () => {
     const [errorMessage, setErrorMessage] = useState("")
     const [loading, setLoading] = useState(false) // add loading spinner / animation
     const router = useRouter()
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if(user) {
+                router.push("/dashboard")
+            }
+        })
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
