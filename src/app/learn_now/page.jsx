@@ -30,8 +30,12 @@ const LearnPick = () => {
 		let openingsData = await getOpeningsData();
 		let imgURLs = []
 		let tempTiles = []
-		let numItemsPerRow = Math.floor(window.innerWidth / 360)
-		let imgWidth = 216
+		let boxWidth = 360;
+		if(window.innerWidth < 380) {
+			boxWidth = window.innerWidth - 20
+		}
+		let numItemsPerRow = Math.floor(window.innerWidth / boxWidth)
+		let imgWidth = boxWidth * 0.6
 		let numRows = Math.ceil(openingsList.length / numItemsPerRow)
 		let row = [];
 		for(let i=0; i < openingsList.length; i++) {
@@ -50,7 +54,7 @@ const LearnPick = () => {
 				let _openingBlock = (
 					<div key={opening} className={styles.openingBlock} onClick={() => {handleTileClick(opening)}}>
 						<Image src={imgURLs[itemIndex]} alt="Ruy Lopez" width={imgWidth} height={imgWidth} className="self-center rounded-md"/>
-						<span className="text-white italic text-2xl pt-2">{opening}</span>
+						<span className="text-white italic text-2xl pb-2 pt-1">{opening}</span>
 					</div>
 				)
 				row.push(_openingBlock)
@@ -105,7 +109,7 @@ const LearnPick = () => {
 				<PopUp/>
 				<NavbarComponent/>
 				<div className="flex justify-center">
-					<span className="text-4xl font-bold">Pick Opening to Learn</span>
+					<span className="lg:text-4xl text-3xl font-bold">Pick Opening to Learn</span>
 				</div>
 				<_learn/>
 			</PageWrapper>
