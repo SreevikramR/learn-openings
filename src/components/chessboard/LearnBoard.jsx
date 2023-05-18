@@ -18,6 +18,7 @@ const LearnBoard = () => {
 
 	useEffect(() => {
 		setGame(new Chess());
+		initBoardWidth();
 		if(playerColor == 'black'){
 			console.log('black playing')
 			setTimeout(() => {
@@ -25,18 +26,31 @@ const LearnBoard = () => {
 				blackFirstMove()
 				playedFirstMove = true
 				}
-			}, 1500);  
+			}, 1500);
 		} else {
 			getExpectedMove()
 		}
 		window.addEventListener('resize', ()=> {
-            if (window.innerWidth / 2 > 500) {
-				setBoardWidth(500);
+			console.log('resize called')
+            if(window.innerWidth < 450) {
+				setBoardWidth(window.innerWidth / 1.5);
+			} else if(window.innerWidth < 850) {
+				setBoardWidth(window.innerWidth / 2.25);
 			} else {
-				setBoardWidth(window.innerWidth / 2.2);
+				setBoardWidth(window.innerWidth / 3);
 			}
         })
 	}, []);
+
+	function initBoardWidth() {
+		if(window.innerWidth < 450) {
+			setBoardWidth(window.innerWidth / 1.5);
+		} else if(window.innerWidth < 850) {
+			setBoardWidth(window.innerWidth / 2.25);
+		} else {
+			setBoardWidth(window.innerWidth / 3);
+		}
+	}
 
 	async function blackFirstMove(){
 		const gameBackup = game;
@@ -86,16 +100,6 @@ const LearnBoard = () => {
 			getExpectedMove()
 		}
 	}, [openingLine, playerColor]);
-
-	useEffect(() => {
-		let viewPortWidth = window.innerWidth;
-
-		if (viewPortWidth / 2 > 500) {
-			setBoardWidth(500);
-		} else {
-			setBoardWidth(viewPortWidth / 2.5);
-		}
-	}, []);
 
 	const makeMove = (move) => {
 		const gameBackup = game;

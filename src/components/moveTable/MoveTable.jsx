@@ -115,21 +115,23 @@ const MoveTable = () => {
 	}
   
 	return (
-		<table id='movesTable' className={styles.moveTable}>
-			<thead className={styles.thead}>
-				<tr className={styles.tr}>
-					<th colSpan={3} className={styles.th}>
-						<div className={styles.headerBox}>
-							<h2 className={styles.h2}>{openingLine}</h2>
-							<div className={styles.toggleSwitch} onClick={togglePlayerColor}>
-								<div id="toggleSwitchHandle" className={styles.toggleSwitchHandleWhite}></div>
+		<div className={styles.tableContainer}>
+			<table id='movesTable' className={styles.moveTable}>
+				<thead className={styles.thead}>
+					<tr className={styles.tr}>
+						<th colSpan={3} className={styles.th}>
+							<div className={styles.headerBox}>
+								<h2 className={styles.h2}>{openingLine}</h2>
+								<div className={styles.toggleSwitch} onClick={togglePlayerColor}>
+									<div id="toggleSwitchHandle" className={styles.toggleSwitchHandleWhite}></div>
+								</div>
 							</div>
-						</div>
-					</th>
-				</tr>
-			</thead>
-			<tbody className={styles.tbody}>{rows}</tbody>
-		</table>
+						</th>
+					</tr>
+				</thead>
+				<tbody className={styles.tbody}>{rows}</tbody>
+			</table>
+		</div>
 	);
 }
 
