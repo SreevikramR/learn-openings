@@ -3,7 +3,7 @@ import NavbarComponent from '@/components/navbar/Navbar'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useChessboard } from '@/context/BoardContext'
-import { getAllOpenings, setFirstLine, getLines, getMoveSequence, getImageURL } from '../api/firebaseAccess'
+import { getAllOpenings, setFirstLine, getLines, getMoveSequence, getImageURL, getNumberOfVariations } from '../api/firebaseAccess'
 import styles from "@/app/styles/openingTiles.module.css"
 import PopUp from '@/components/popUp/PopUp'
 import PageWrapper from '@/components/wrapper/pageWrapper'
@@ -28,6 +28,7 @@ const LearnPick = () => {
 
 	async function setTileData(openingsList) {
 		let openingsData = await getOpeningsData();
+		let numVariations = await getNumberOfVariations(openingsList);
 		let imgURLs = []
 		let tempTiles = []
 		let boxWidth = 360;
@@ -55,6 +56,9 @@ const LearnPick = () => {
 					<div key={opening} className={styles.openingBlock} onClick={() => {handleTileClick(opening)}}>
 						<Image src={imgURLs[itemIndex]} alt="Ruy Lopez" width={imgWidth} height={imgWidth} className="self-center rounded-md"/>
 						<span className="text-white italic text-2xl pb-2 pt-1">{opening}</span>
+						<div className="border-t-2 border-zinc-800 flex justify-end pr-2">
+							<span>{numVariations[itemIndex]} Variations</span>
+						</div>
 					</div>
 				)
 				row.push(_openingBlock)
