@@ -56,14 +56,14 @@ export async function getNumberOfVariations(openingsList){
     let numberOfVariations = [];
     for(let i=0; i<openingsList.length; i++){
         if(getDataLocal(openingsList[i] + "Data") !== false) {
-            openingData = getDataLocal(openingsList[i] + "Data")
+            let openingData = getDataLocal(openingsList[i] + "Data")
             openingLines = Object.keys(openingData).sort()
             console.log("from local: " + openingLines.length)
             numberOfVariations.push(openingLines.length)
         } else {
             const docRef = doc(db, "openings", openingsList[i]);
             const packet = await getDoc(docRef);
-            openingData = packet.data()
+            let openingData = packet.data()
             storeDataLocal(openingsList[i] + "Data", openingData)
     
             openingLines = Object.keys(openingData).sort()
