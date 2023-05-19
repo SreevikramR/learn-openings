@@ -23,6 +23,7 @@ const VariationTable = () => {
         let row = (
             <tr key={lines[i]} onClick={() => setLine(line)} className={styles.variationRow}>
                 <td className={styles.td}>{lines[i]}</td>
+                <td className="w-1/4 text-right justify-center hidden flex-wrap content-center">&#10004;</td>
             </tr>
         );
         rows.push(row)

@@ -75,9 +75,7 @@ export async function getNumberOfVariations(openingsList){
 
 export async function setFirstLine(openingName){
     await versionControl();
-    if(previousOpeningName == openingName){
-        return openingLines[0]
-    } else if(getDataLocal(openingName + "Data") !== false) {
+    if(getDataLocal(openingName + "Data") !== false) {
         openingData = getDataLocal(openingName + "Data")
         openingLines = Object.keys(openingData).sort()
         previousOpeningName = openingName

@@ -2,10 +2,10 @@
     background-color: rgb(39, 39, 39);
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     align-self: center;
-    width: 75%;
+    width: 85%;
+    max-width: 60vw;
     max-height: 60vh;
     overflow-y: scroll;
-    margin-left: 5vw;
     color: white;
     font-weight: bold;
 }
@@ -20,6 +20,8 @@
 
 .variationRow {
     cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .th {
@@ -28,9 +30,8 @@
 }
 
 .td {
-    width: 45%;
+    width: 75%;
     padding: 2vh;
-    text-align: left;
 } 
 
 .indexNumber {
@@ -56,17 +57,48 @@
     margin-bottom: 1vh;
 	border: 0;
     font-style: oblique;
+    font-size: medium;
 }
 
 .openingName {
-    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: white;
-    font-size: 2.75vw;
-    text-align: center;
-    margin: 0;
-    margin-left: 5vw;
-    margin-bottom: 1vh;
-	border: 0;
-    font-style: oblique;
-    font-weight: bold;
+    display: none;
+}
+
+@media screen and (min-width: 1024px) {
+    .openingName {
+        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        color: white;
+        font-size: 2.75vw;
+        text-align: center;
+        margin: 0;
+        margin-left: 5vw;
+        margin-bottom: 1vh;
+        border: 0;
+        font-style: oblique;
+        font-weight: bold;
+        display: block;
+    }
+
+    .table {
+        background-color: rgb(39, 39, 39);
+        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        align-self: center;
+        width: 75%;
+        max-height: 60vh;
+        overflow-y: scroll;
+        margin-left: 5vw;
+        color: white;
+        font-weight: bold;
+    }
+
+    .h2 {
+        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        color: white;
+        font-size: 2vw;
+        margin: 0;
+        margin-bottom: 1vh;
+        border: 0;
+        font-style: oblique;
+        font-size: x-large;
+    }
 }

@@ -3,7 +3,7 @@
     align-self: center;
     color: white;
     font-weight: bold;
-    max-height: 33vh;
+    max-height: 50vh;
     width: 100%;
     display: table;
     border-collapse: collapse;
@@ -14,10 +14,11 @@
 .tableContainer {
     align-self: center;
     display: block;
-    max-height: 33vh;
+    max-height: 50vh;
     width: 85%;
     max-width: 60vw;
     overflow-y: scroll;
+    margin-bottom: 2.5rem;
 }
 
 .openingComplete {
@@ -155,6 +156,7 @@
         width: 85%;
         max-width: 30vw;
         overflow-y: scroll;
+        margin-bottom: 0;
     }
 
     .openingComplete {
@@ -213,6 +215,7 @@
         color: white;
         font-size: 2vw;
         margin: 0;
+        width: 75%;
         margin-bottom: 1vh;
         border: 0;
         font-style: oblique;
@@ -262,5 +265,6 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-around;
+        width: 100%;
     }
 }
