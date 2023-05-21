@@ -23,7 +23,6 @@ const NavbarComponent = ({ fixed }) => {
 			}
 			stateChanging = false;
 		});
-		console.log(isLoggedIn)
 	}, [])
 
 	const handleSignOut = () => {
@@ -37,12 +36,12 @@ const NavbarComponent = ({ fixed }) => {
 			<div className='hidden w-full lg:inline-flex lg:flex-grow lg:w-auto'>
 				<div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start flex flex-col lg:h-auto text-white'>
 					<Link href="/login">
-						<span className='lg:inline-flex lg:w-auto w-full pl-3 py-2 rounded border-2 border-l-zinc-900 border-black text-white items-center justify-center text-xl font-semibold italic'>
+						<span className='lg:inline-flex lg:w-auto w-full pl-3 py-2 rounded border-2 border-l-zinc-800 border-black text-white items-center justify-center text-xl font-semibold italic'>
 							Login
 						</span>
 					</Link>
 					<Link href="/register">
-						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 mx-2 rounded border-2 border-l-zinc-900 border-black items-center justify-center text-xl font-semibold italic text-white'>
+						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 mx-2 rounded border-2 border-l-zinc-800 border-black items-center justify-center text-xl font-semibold italic text-white'>
 							Register
 						</span>
 					</Link>
@@ -61,7 +60,7 @@ const NavbarComponent = ({ fixed }) => {
 			<div className='hidden w-full lg:inline-flex lg:flex-grow lg:w-auto'>
 				<div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start flex flex-col lg:h-auto text-white'>
 					<Link href="/dashboard">
-						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded border-2 border-l-zinc-900 border-black text-white items-center justify-center text-xl font-semibold italic'>
+						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded border-2 border-l-zinc-800 border-black text-white items-center justify-center text-xl font-semibold italic'>
 							Hi {name}
 						</span>
 					</Link>
@@ -85,19 +84,8 @@ const NavbarComponent = ({ fixed }) => {
 
 	const navbar = () => {
 		return (
-			// <>
-			// 	<nav className='flex items-center flex-wrap bg-black p-3 pt-2 border-b-2 mb-4 border-b-zinc-900'>
-			// 		<Link href='/'>
-			// 			<span className='sm:text-m lg:text-4xl text-white font-semibold tracking-wide'>
-			// 				Chess Openings
-			// 			</span>
-			// 		</Link>
-			// 		<RightSide />
-			// 	</nav>
-			// </>
-
 			<>
-				<nav className="relative flex flex-wrap items-center justify-between px-2 py-2 mb-4 border-b-2 border-b-zinc-900">
+				<nav className="relative flex flex-wrap items-center justify-between px-2 py-2 mb-4 border-b-2 border-b-zinc-800">
 					<div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
 						<div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
 							<button className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none" type="button" onClick={() => setNavbarOpen(!navbarOpen)}>
@@ -119,12 +107,12 @@ const NavbarComponent = ({ fixed }) => {
 						<div className={"lg:" + (isLoggedIn ? "hidden" : "flex") +  " flex-grow items-center" + (navbarOpen ? " flex" : " hidden")} id="example-navbar-danger">
 							<ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
 								<li className={"nav-item" + (isLoggedIn ? " hidden" : " flex")}>
-									<a className="px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900" href="/login">
+									<a className="px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-800" href="/login">
 										<span className='mx-1'>Login</span>
 									</a>
 								</li>
 								<li className={"nav-item" + (isLoggedIn ? " hidden" : " flex")}>
-									<a className="px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900" href="/login">
+									<a className="px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-800" href="/register">
 										<span className="mx-1">Register</span>
 									</a>
 								</li>
@@ -140,11 +128,11 @@ const NavbarComponent = ({ fixed }) => {
 
 								<li className={"nav-item" + (!isLoggedIn ? " hidden" : " flex")}>
 									<Link href="/dashboard">
-										<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900">Dashboard</span>
+										<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-800">Dashboard</span>
 									</Link>
 								</li>
 								<li className={"nav-item" + (!isLoggedIn ? " hidden" : " flex")} onClick={handleSignOut}>
-									<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-900">Sign Out</span>
+									<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white hover:opacity-75 lg:border-l-2 lg:border-l-zinc-800">Sign Out</span>
 								</li>
 							</ul>
 						</div>
@@ -152,7 +140,7 @@ const NavbarComponent = ({ fixed }) => {
 						<div className={"lg:" + (isLoggedIn ? "flex" : "hidden") + " flex-grow items-center hidden"} id="example-navbar-danger">
 							<ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
 								<li className="nav-item">
-									<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white pointer-none lg:border-l-2 lg:border-l-zinc-900">Hi {name}</span>
+									<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white pointer-none lg:border-l-2 lg:border-l-zinc-800">Hi {name}</span>
 								</li>
 								<li className="nav-item py-3 lg:py-0">
 									<Link href="/dashboard">

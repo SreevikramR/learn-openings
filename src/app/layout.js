@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import VercelAnalytics from '@/scripts/vercelAnalytics/VercelAnalytics'
 import './globals.css'
 import ContextWrapper from '@/components/wrapper/contextWrapper'
@@ -12,8 +13,17 @@ export default function RootLayout({ children }) {
 		<html lang="en" className="h-full">
 			<ContextWrapper>
 				<body className="h-full">
-				<script	async src="https://www.googletagmanager.com/gtag/js?id=G-6KBPW0W9J9"/>
-    			<script>{injectGA()}</script>
+					<script type="text/javascript">
+						var sc_project=12883036; 
+						var sc_invisible=1; 
+						var sc_security="0bbd5ceb"; 
+					</script>
+					<script type="text/javascript"
+					src="https://www.statcounter.com/counter/counter.js" async></script>
+					<noscript><div class="statcounter"><a title="Web Analytics"
+						href="https://statcounter.com/" target="_blank"><img class="statcounter"
+						src="https://c.statcounter.com/12883036/0/0bbd5ceb/1/" alt="Web Analytics"
+					referrerPolicy="no-referrer-when-downgrade"/></a></div></noscript>
 					{children}
 				</body>
 			</ContextWrapper>
@@ -21,16 +31,3 @@ export default function RootLayout({ children }) {
 		</html>
 	)
 }
-
-const injectGA = () => {
-	if (typeof window == 'undefined') {
-	  return;
-	}
-	window.dataLayer = window.dataLayer || [];
-	function gtag() {
-	  window.dataLayer.push(arguments);
-	}
-	gtag('js', new Date());
-  
-	gtag('config', 'G-6KBPW0W9J9');
-  };
