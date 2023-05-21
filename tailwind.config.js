@@ -9,8 +9,12 @@ module.exports = {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'transition1' : "url('../../public/wave.svg')",
+        'transition2' : "url('../../public/wave2.svg')",
+      },
+      aspectRatio: {
+        '90/15' : '90/15',
       },
     },
   },
