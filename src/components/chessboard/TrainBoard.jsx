@@ -43,13 +43,15 @@ const TrainBoard = () => {
 	}, []);
 
 	function initBoardWidth() {
-		if(window.innerWidth < 450) {
-			setBoardWidth(window.innerWidth / 1.5);
-		} else if(window.innerWidth < 850) {
-			setBoardWidth(window.innerWidth / 2.25);
-		} else {
-			setBoardWidth(window.innerWidth / 3);
-		}
+		setTimeout(() => {
+			if(window.innerWidth < 450) {
+				setBoardWidth(window.innerWidth / 1.5);
+			} else if(window.innerWidth < 850) {
+				setBoardWidth(window.innerWidth / 2.25);
+			} else {
+				setBoardWidth(window.innerWidth / 3);
+			}
+		}, 100)
 	}
 
 	async function blackFirstMove(){
