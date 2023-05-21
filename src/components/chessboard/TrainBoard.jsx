@@ -20,6 +20,7 @@ const TrainBoard = () => {
 
 	useEffect(() => {
 		setGame(new Chess());
+		initBoardWidth();
 		if(playerColor == 'black'){
 			console.log('black playing')
 			setTimeout(() => {
@@ -30,13 +31,26 @@ const TrainBoard = () => {
 			}, 1500);  
 		}
 		window.addEventListener('resize', ()=> {
-            if (window.innerWidth / 2 > 500) {
-				setBoardWidth(500);
+			console.log('resize called')
+            if(window.innerWidth < 450) {
+				setBoardWidth(window.innerWidth / 1.5);
+			} else if(window.innerWidth < 850) {
+				setBoardWidth(window.innerWidth / 2.25);
 			} else {
-				setBoardWidth(window.innerWidth / 2.2);
+				setBoardWidth(window.innerWidth / 3);
 			}
         })
 	}, []);
+
+	function initBoardWidth() {
+		if(window.innerWidth < 450) {
+			setBoardWidth(window.innerWidth / 1.5);
+		} else if(window.innerWidth < 850) {
+			setBoardWidth(window.innerWidth / 2.25);
+		} else {
+			setBoardWidth(window.innerWidth / 3);
+		}
+	}
 
 	async function blackFirstMove(){
 		const gameBackup = game;
@@ -167,14 +181,16 @@ const TrainBoard = () => {
 	};
 
 	return (
-		<Chessboard
-			boardWidth={boardWidth}
-			position={position}
-			onPieceDrop={onDrop}
-			isDraggablePiece={isDraggable}
-			animationDuration={750}
-			boardOrientation={playerColor}
-		/>
+		<div className={"border-8" + (openingComplete ? " border-green-600" : " border-black")}>
+			<Chessboard
+				boardWidth={boardWidth}
+				position={position}
+				onPieceDrop={onDrop}
+				isDraggablePiece={isDraggable}
+				animationDuration={750}
+				boardOrientation={playerColor}
+			/>
+		</div>
 	);
 };
 

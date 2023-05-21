@@ -32,16 +32,18 @@ const VariationTable = () => {
     return (
         <div className="flex flex-col">
             <h2 className={styles.openingName}>{openingName}</h2>
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th className={styles.th}>
-                            <h2 className={styles.h2}>Variations</h2>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </table>
+            <div className={styles.tableContainer}>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th className={styles.th}>
+                                <h2 className={styles.h2}>Variations</h2>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                </table>
+            </div>
         </div>
     )
 }
