@@ -1,5 +1,5 @@
 .learn_hc1{
-    width: 30%;
+    width: 100%;
 }
   
 .learn_hc2{
@@ -7,7 +7,9 @@
 }
   
 .learn_hc3 {
-    width: 30%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
   
 .learn_row:after {
@@ -20,40 +22,50 @@
     padding: 0;
     padding-top: 1.5vh;
     display: flex;
+    flex-direction: column;
     width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
-.toggleSwitch {
-    display: inline-block;
-    position: relative;
-    width: 50px;
-    height: 25px;
-    border-radius: 15px;
-    background-color: #ccc;
-    cursor: pointer;
-    margin-left: 15%;
+.menuBar {
+    width: 85%;
+    max-width: 60vw;
+    border: 0px;
+    border-radius: 8px 8px 0px 0px;
+    border-color: none;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+    background-color: #171717;
 }
-    
-.toggle-switch-handle {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 21px;
-    height: 21px;
-    border-radius: 50%;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0,0,0,.4);
-    transition: left 0.3s;
-}
-    
-.toggle-switch-handle.white {
-    left: 2px;
-}
-  
-.toggle-switch-handle.black {
-    left: 27px;
-}
-  
-.toggle-switch:hover {
-    background-color: #bbb;
+
+@media screen and (min-width: 1024px) {
+    .learn_hc1{
+        width: 100%;
+    }
+      
+    .learn_hc2{
+        width: fit-content;
+    }
+      
+    .learn_hc3 {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+      
+    .learn_row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+      
+    .learn_row {
+        padding: 0;
+        padding-top: 1.5vh;
+        display: flex;
+        width: 100%;
+    }
 }

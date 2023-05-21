@@ -81,7 +81,6 @@ const LearnBoard = () => {
 			tempArray.push(history.at(-1).to)
 			arrowArray.push(tempArray)
 		} else {
-			arrowArray = [['c4', 'd3'], ['d3', 'f6']]
 			setOpeningComplete(true)
 		}
 	}
@@ -129,7 +128,6 @@ const LearnBoard = () => {
 			}, 100);
 		} else if (nextMove == null) {
 			setMoveResult("correct");
-			arrowArray = [['c4', 'd3'], ['d3', 'f6']]
 			setOpeningComplete(true)
 			//console.log("move sequence complete")
 		} else {
@@ -137,7 +135,6 @@ const LearnBoard = () => {
 				setMoveResult("correct");
 
 				if (tempMoveHistory.length === moveSequence.length - 1) {
-					arrowArray = [['c4', 'd3'], ['d3', 'f6']]
 					setOpeningComplete(true)
 				}
 
@@ -195,16 +192,18 @@ const LearnBoard = () => {
 	};
 
 	return (
-		<Chessboard
-			boardWidth={boardWidth}
-			position={position}
-			onPieceDrop={onDrop}
-			isDraggablePiece={isDraggable}
-			animationDuration={750}
-			customArrows={arrowArray}
-			customArrowColor="rgb(87, 109, 232, 0.9)"
-			boardOrientation={playerColor}
-		/>
+		<div className={"border-8" + (openingComplete ? " border-green-600" : " border-none")}>
+			<Chessboard
+				boardWidth={boardWidth}
+				position={position}
+				onPieceDrop={onDrop}
+				isDraggablePiece={isDraggable}
+				animationDuration={750}
+				customArrows={arrowArray}
+				customArrowColor="rgb(87, 109, 232, 0.9)"
+				boardOrientation={playerColor}
+			/>
+		</div>
 	);
 }
 
