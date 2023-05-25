@@ -26,11 +26,6 @@ export default function Home() {
 				</div>
 			</section>
 			<div className="aspect-90/15 w-full bg-no-repeat bg-center bg-cover bg-transition2 -mt-1"></div>
-			{/* <section className="bg-black flex">
-				<div className='w-full lg:w-4/6 text-center text-xl lg:text-4xl font-semibold ml-10 mr-10 mb-24'>
-					<span className=''>Master chess openings with interactive practice boards. Play the moves and see how they work. Start your games with confidence and gain an edge. Try it now and see the difference!</span>
-				</div>
-			</section> */}
 			<section className="bg-black flex flex-col">
 				<div className='w-full lg:w-11/12 text-center text-2xl lg:text-5xl italic font-semibold mb-8 lg:mb-16 lg:justify-end lg:flex'>
 					<span className='font-semibold'>What is a Chess Opening?</span>
