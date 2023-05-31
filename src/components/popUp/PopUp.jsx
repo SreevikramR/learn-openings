@@ -8,7 +8,7 @@ import { getOpeningsData } from '@/app/api/firebaseAccess'
 
 const PopUp = () => {
 	const router = useRouter()
-	const { openingName, popUpType } = useChessboard()
+	const { openingName, popUpType, setMode } = useChessboard()
 
 	const [popUpLink, setPopUpLink] = useState("/dashboard")
 	const [openingText, setOpeningText] = useState()
@@ -18,8 +18,10 @@ const PopUp = () => {
 	useEffect(() => {
 		if(popUpType == "learn") {
 			setPopUpLink("/learn")
+			setMode("learn")
 		} else if(popUpType == "train") {
 			setPopUpLink("/train")
+			setMode("train")
 		}
 	}, [popUpType])
 

@@ -22,6 +22,7 @@ export const BoardProvider = ({ children }) => {
 	const [position, setPosition] = useState()
 	const [openingComplete, setOpeningComplete] = useState(false)
 	const [playerColor, setPlayerColor] = useState('white')
+	const [mode, setMode] = useState('')
 
 	const value = {
 		openingName,
@@ -50,6 +51,8 @@ export const BoardProvider = ({ children }) => {
 		setAllOpenings,
 		playerColor,
 		setPlayerColor,
+		mode,
+		setMode,
 	}
 	
 

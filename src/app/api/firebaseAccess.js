@@ -1,6 +1,6 @@
 import { auth, db, storage } from "@/firebase";
 import { getDoc, doc, setDoc, collection, getDocs } from "firebase/firestore";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { ref, getDownloadURL } from "firebase/storage";
 import { getDataLocal, storeDataLocal } from "./localStorage";
 
 let firstName = null;
@@ -58,7 +58,6 @@ export async function getNumberOfVariations(openingsList){
         if(getDataLocal(openingsList[i] + "Data") !== false) {
             let openingData = getDataLocal(openingsList[i] + "Data")
             openingLines = Object.keys(openingData).sort()
-            console.log("from local: " + openingLines.length)
             numberOfVariations.push(openingLines.length)
         } else {
             const docRef = doc(db, "openings", openingsList[i]);
@@ -135,6 +134,145 @@ export async function getOpeningsData() {
         })
         storeDataLocal("openingsData", openingsData)
         return openingsData
+    }
+}
+
+export async function openingLineCompleted(openingName, openingLine, color, mode) {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const packet = await getDoc(docRef);
+    let data = packet.data();
+    if(data[color + "_" + mode] === undefined){
+        let completedOpenings = [];
+        let openingCode = await getOpeningVariationCode(openingName, openingLine)
+        completedOpenings.push(openingCode)
+        if(mode === "learn") {
+            if(color === "white"){
+                setDoc(docRef, {white_learn: completedOpenings}, {merge: true});
+            } else {
+                setDoc(docRef, {black_learn: completedOpenings}, {merge: true});
+            }
+        } else {
+            if(color === "white"){
+                setDoc(docRef, {white_train: completedOpenings}, {merge: true});
+            } else {
+                setDoc(docRef, {black_train: completedOpenings}, {merge: true});
+            }
+        }
+    } else {
+        let openingCode = await getOpeningVariationCode(openingName, openingLine)
+        if(mode === "learn") {
+            if(color === "white") {
+                let completedOpenings = data.white_learn;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {white_learn: completedOpenings}, {merge: true});
+            } else {
+                let completedOpenings = data.black_learn;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {black_learn: completedOpenings}, {merge: true});
+            }
+        } else {
+            if(color === "white") {
+                let completedOpenings = data.white_train;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {white_train: completedOpenings}, {merge: true});
+            } else {
+                let completedOpenings = data.black_train;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {black_train: completedOpenings}, {merge: true});
+            }
+        }
+    }
+}
+
+export async function getCompletedOpenings(color, mode) {
+    await versionControl();
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const packet = await getDoc(docRef);
+    let data = packet.data();
+    if(data[color + "_" + mode] === undefined){
+        return []
+    } else {
+        storeDataLocal(color + "_" + mode, data[color + "_" + mode])
+        return data[color + "_" + mode]
+    }
+}
+
+export async function getCompletedOpeningVariations(openingName, mode) {
+    await versionControl();
+    let openingCode = await getOpeningCode(openingName);
+    let variationCodes = await getAllVariationCodes(openingName);
+    let completedOpenings_white = await getCompletedOpenings("white", mode);
+    let completedOpeningVariations = [];
+    let completedOpenings_black = await getCompletedOpenings("black", mode);
+    let tempArray = [];
+    for(let i = 0; i < completedOpenings_white.length; i++){
+        if(completedOpenings_white[i].includes(openingCode)){
+            let variationCode = completedOpenings_white[i].split("-")[1]
+            tempArray.push(getKeyByValue(variationCodes, variationCode).slice(0, -5))
+        }
+    }
+    completedOpeningVariations.push(tempArray)
+    tempArray = [];
+    for(let i = 0; i < completedOpenings_black.length; i++){
+        if(completedOpenings_black[i].includes(openingCode)){
+            let variationCode = completedOpenings_black[i].split("-")[1]
+            tempArray.push(getKeyByValue(variationCodes, variationCode).slice(0, -5))
+        }
+    }
+    completedOpeningVariations.push(tempArray)
+    return completedOpeningVariations;
+}
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
+
+async function getOpeningCode(openingName) {
+    if(getDataLocal("openingCodes") !== false) {
+        let openingCodes = getDataLocal("openingCodes")
+        return openingCodes[openingName]
+    } else {
+        const docRef = doc(db, "openingsData", "openingCodes");
+        const packet = await getDoc(docRef);
+        let openingCodes = packet.data();
+        return openingCodes[openingName]
+    }
+}
+
+async function getAllVariationCodes(openingName) {
+    if(getDataLocal(openingName + "Codes") !== false) {
+        let openingCodes = getDataLocal(openingName + "Codes")
+        return openingCodes
+    } else {
+        const docRef = doc(db, "openingsData", openingName);
+        const packet = await getDoc(docRef);
+        let openingCodes = packet.data();
+        return openingCodes
+    }
+}
+
+async function getOpeningVariationCode(openingName, openingLine) {
+    if(getDataLocal(openingName + "Codes") !== false) {
+        let openingCodes = getDataLocal(openingName + "Codes")
+        return openingCodes["openingCode"] + "-" + openingCodes[openingLine + " Code"]
+    } else {
+        const docRef = doc(db, "openingsData", openingName);
+        const packet = await getDoc(docRef);
+        let openingCodes = packet.data();
+        storeDataLocal(openingName + "Codes", openingCodes)
+        return openingCodes["openingCode"] + "-" + openingCodes[openingLine + " Code"]
     }
 }
 

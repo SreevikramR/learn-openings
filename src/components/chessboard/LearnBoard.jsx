@@ -3,6 +3,7 @@ import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import MoveSelector from "../../scripts/MoveSelector";
 import React, { useState, useEffect } from 'react'
+import { openingLineCompleted } from "@/app/api/firebaseAccess";
 
 let nextMove;
 let tempMoveHistory = []
@@ -10,7 +11,7 @@ let arrowArray = []
 let playedFirstMove = false;
 
 const LearnBoard = () => {
-	const {moveHistory, setMoveHistory, openingLine, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor} = useChessboard()
+	const {moveHistory, setMoveHistory, openingLine, openingName, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor} = useChessboard()
 
 	tempMoveHistory = moveHistory;
 
@@ -27,8 +28,6 @@ const LearnBoard = () => {
 				playedFirstMove = true
 				}
 			}, 1500);
-		} else {
-			getExpectedMove()
 		}
 		window.addEventListener('resize', ()=> {
 			console.log('resize called')
@@ -82,6 +81,7 @@ const LearnBoard = () => {
 			arrowArray.push(tempArray)
 		} else {
 			setOpeningComplete(true)
+			openingLineCompleted(openingName, openingLine, playerColor, "learn")
 		}
 	}
 
@@ -129,6 +129,7 @@ const LearnBoard = () => {
 		} else if (nextMove == null) {
 			setMoveResult("correct");
 			setOpeningComplete(true)
+			openingLineCompleted(openingName, openingLine, playerColor, "learn")
 			//console.log("move sequence complete")
 		} else {
 			setTimeout(() => {
@@ -136,6 +137,7 @@ const LearnBoard = () => {
 
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
+					openingLineCompleted(openingName, openingLine, playerColor, "learn")
 				}
 
 				playMove(nextMove);
