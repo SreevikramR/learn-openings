@@ -30,58 +30,6 @@ const NavbarComponent = ({ fixed }) => {
 		router.push("/")
 	}
 
-
-	const notLoggedIn = () => {
-		return (
-			<div className='hidden w-full lg:inline-flex lg:flex-grow lg:w-auto'>
-				<div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start flex flex-col lg:h-auto text-white'>
-					<Link href="/login">
-						<span className='lg:inline-flex lg:w-auto w-full pl-3 py-2 rounded border-2 border-l-zinc-800 border-black text-white items-center justify-center text-xl font-semibold italic'>
-							Login
-						</span>
-					</Link>
-					<Link href="/register">
-						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 mx-2 rounded border-2 border-l-zinc-800 border-black items-center justify-center text-xl font-semibold italic text-white'>
-							Register
-						</span>
-					</Link>
-					<Link href="/try_now">
-						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded-xl border-2 border-blue-700 text-white font-bold items-center justify-center hover:border-white hover:text-white text-xl hover:cursor-pointer bg-blue-600'>
-						Try Now!
-						</span>
-					</Link>
-				</div>
-			</div>
-		)
-	}
-
-	const loggedIn = () => {
-		return (
-			<div className='hidden w-full lg:inline-flex lg:flex-grow lg:w-auto'>
-				<div className='lg:inline-flex lg:flex-row lg:ml-auto lg:w-auto w-full lg:items-center items-start flex flex-col lg:h-auto text-white'>
-					<Link href="/dashboard">
-						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded border-2 border-l-zinc-800 border-black text-white items-center justify-center text-xl font-semibold italic'>
-							Hi {name}
-						</span>
-					</Link>
-					<Link href="/dashboard">
-						<span className='lg:inline-flex lg:w-auto w-full px-3 py-2 rounded-xl border-2 border-blue-700 text-white font-bold items-center justify-center hover:border-white hover:text-white text-xl hover:cursor-pointer bg-blue-600'>
-							Dashboard
-						</span>
-					</Link>
-				</div>
-			</div>
-		)
-	}
-
-	const RightSide = () => {
-		if (isLoggedIn) {
-			return loggedIn();
-		} else {
-			return notLoggedIn();
-		}
-	}
-
 	const navbar = () => {
 		return (
 			<>
@@ -92,7 +40,7 @@ const NavbarComponent = ({ fixed }) => {
 								<i className="fas fa-bars"></i>
 							</button>
 							<a className="text-base lg:text-4xl font-semibold leading-relaxed hidden lg:inline-block mr-4 py-2 whitespace-nowrap text-white" href="/">
-								Chess Openings
+								Openings 101
 							</a>
 							<a className={"text-xl font-semibold leading-relaxed lg:hidden inline-block mr-4 py-2 whitespace-nowrap text-white" + (isLoggedIn ? " hidden" : " inline-block")} href="/login">
 								Login

@@ -3,11 +3,17 @@ import VercelAnalytics from '@/scripts/vercelAnalytics/VercelAnalytics'
 import './globals.css'
 import ContextWrapper from '@/components/wrapper/contextWrapper'
 import Script from 'next/script'
+import { Oxanium } from 'next/font/google'
 
 export const metadata = {
-	title: 'Chess Openings',
+	title: 'Openigns 101',
 	description: 'Learn Chess openings and practice them with our interactive trainer.',
 }
+
+const unbounded = Oxanium({
+	weight: ['200', '300', '400', '500', '600', '700', '800'],
+	subsets: ['latin'],
+})
 
 export default function RootLayout({ children }) {
 	return (
@@ -25,7 +31,9 @@ export default function RootLayout({ children }) {
 						});
 							`}
 					</Script>
-					{children}
+					<main className={unbounded.className}>
+						{children}
+					</main>
 				</body>
 			</ContextWrapper>
 			<VercelAnalytics/>
