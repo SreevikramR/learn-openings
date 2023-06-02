@@ -16,7 +16,7 @@ export default function Home() {
 				</div>
 				<div className="text-white w-full text-4xl font-bold text-center mt-3 lg:text-white lg:col-span-1 lg:w-1/2 lg:text-center lg:text-7xl lg:font-bold lg:flex-row">
 					<span className="text-blue-600">Crush</span> your <br/> opponents with <br/> <span className="text-blue-600">flawless</span> openings
-					<br/><div className="mt-6 mb-10 xl:mb-0"><Link href="/try_now"><span className="text-3xl font-bold text-white lg:border-4 lg:border-blue-600 bg-blue-600 hover:border-white lg:px-4 px-2 py-2 lg:m-4 lg:py-3 rounded-xl lg:rounded-2xl hover:cursor-pointer"> Try Now! </span></Link></div>
+					<br/><div className="mt-6 mb-10 xl:mb-0"><Link href="/try_now"><span className="text-3xl font-bold text-white lg:border-4 lg:border-blue-600 bg-blue-600 hover:border-white lg:px-4 px-2 py-2 lg:m-4 lg:py-3 rounded-xl lg:rounded-2xl hover:cursor-pointer" data-umami-event="Try Now Button"> Try Now! </span></Link></div>
 				</div>
 			</section>
 			<div className="aspect-90/15 w-full bg-no-repeat bg-center bg-cover bg-transition1"></div>
@@ -35,7 +35,12 @@ export default function Home() {
 						There are many different chess openings, and each one has its own strengths and weaknesses<br/> <br/>
 						With a little practice, you can learn to play chess openings like a pro</span>
 				</div>
-				<br/><div className="mb-20 flex self-center"><Link href="/try_now"><span className="text-xl lg:text-3xl font-bold text-white lg:border-4 lg:border-blue-600 bg-blue-600 hover:border-white lg:px-4 px-2 py-2 lg:m-4 lg:py-3 rounded-xl lg:rounded-2xl hover:cursor-pointer"> Start Learning Now! </span></Link></div>
+				<br/><div className="mb-10 flex self-center"><Link href="/try_now"><span className="text-xl lg:text-3xl font-bold text-white lg:border-4 lg:border-blue-600 bg-blue-600 hover:border-white lg:px-4 px-2 py-2 lg:m-4 lg:py-3 rounded-xl lg:rounded-2xl hover:cursor-pointer" data-umami-event="Bottom Try Now Button"> Start Learning Now! </span></Link></div>
+				<span className='flex justify-center center pb-4 pt-3 w-full border-t-2 border-zinc-800'>
+					<a className='p-2 border-white border-2 rounded-lg' href="mailto:sreevikram.r@gmail.com">
+						Contact: sreevikram.r@gmail.com
+					</a>
+				</span>
 			</section>
 			<TrialPageInit />
 		</>

@@ -81,6 +81,7 @@ const LearnBoard = () => {
 			arrowArray.push(tempArray)
 		} else {
 			setOpeningComplete(true)
+			umami.track('Learn - variation complete')
 			openingLineCompleted(openingName, openingLine, playerColor, "learn")
 		}
 	}
@@ -129,6 +130,7 @@ const LearnBoard = () => {
 		} else if (nextMove == null) {
 			setMoveResult("correct");
 			setOpeningComplete(true)
+			umami.track('Learn - variation complete')
 			openingLineCompleted(openingName, openingLine, playerColor, "learn")
 			//console.log("move sequence complete")
 		} else {
@@ -137,6 +139,7 @@ const LearnBoard = () => {
 
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
+					umami.track('Learn - variation complete')
 					openingLineCompleted(openingName, openingLine, playerColor, "learn")
 				}
 

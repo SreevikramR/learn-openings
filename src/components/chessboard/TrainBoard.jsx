@@ -121,6 +121,7 @@ const TrainBoard = () => {
 		} else if (nextMove == null) {
 			setMoveResult("correct");
 			setOpeningComplete(true)
+			umami.track('Train - variation complete')
 			//console.log("move sequence complete")
 		} else {
 			setTimeout(() => {
@@ -128,6 +129,7 @@ const TrainBoard = () => {
 
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
+					umami.track('Train - variation complete')
 					//console.log("move sequence complete")
 				}
 

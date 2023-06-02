@@ -10,7 +10,7 @@ export const metadata = {
 	description: 'Learn Chess openings and practice them with our interactive trainer.',
 }
 
-const unbounded = Oxanium({
+const oxanium = Oxanium({
 	weight: ['200', '300', '400', '500', '600', '700', '800'],
 	subsets: ['latin'],
 })
@@ -20,6 +20,7 @@ export default function RootLayout({ children }) {
 		<html lang="en" className="h-full">
 			<ContextWrapper>
 				<body className="h-full">
+				<Script async src="https://openings101-admin.vercel.app/script.js" data-website-id="49a9619f-20b8-4a2d-bc43-e9fc86033ae5"></Script>
 					<Script async strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=G-6KBPW0W9J9`}/>
 					<Script async id="ga-script" strategy="lazyOnload">
 					{`
@@ -31,7 +32,7 @@ export default function RootLayout({ children }) {
 						});
 							`}
 					</Script>
-					<main className={unbounded.className}>
+					<main className={oxanium.className}>
 						{children}
 					</main>
 				</body>

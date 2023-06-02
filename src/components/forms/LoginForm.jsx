@@ -28,6 +28,7 @@ const LoginForm = () => {
             await setPersistence(auth, browserSessionPersistence).then(() =>
                 signInWithEmailAndPassword(auth, email, password)
             );
+            umami.track('User Logged In')
             router.push("/dashboard");
         } catch (error) {
             document.getElementById("errorBox").style.display = "flex";

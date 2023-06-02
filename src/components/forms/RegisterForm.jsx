@@ -53,6 +53,7 @@ const RegisterForm = () => {
                     );
                     console.log("user: " + auth.currentUser);
                     await createUser(fName, lName, username);
+                    umami.track('User Registered')
                     router.push("/dashboard");
                 } catch (error) {
                     document.getElementById("errorBox").style.display = "flex";
