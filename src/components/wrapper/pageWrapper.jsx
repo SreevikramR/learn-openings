@@ -4,8 +4,6 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
 import NavbarComponent from '@/components/navbar/Navbar'
 
-// Checks if the user is not logged in and does not allow unauthorized access to the page
-
 const PageWrapper = ({ children }) => {
 	const [isloggedIn, setIsLoggedIn] = useState(false)
 	const router = useRouter()

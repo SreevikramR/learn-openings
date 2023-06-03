@@ -6,14 +6,16 @@
     padding-top: 15px;
     float: left;
     margin-top: 2vh;
-    background-color: #141414;
+    background-color: black;
     text-align: center;
     display: flex;
     flex-direction: column;
     color: white;
     vertical-align: middle;
     border: 3px solid rgb(56, 56, 56);
-    border-radius: 6px;}
+    border-radius: 6px;
+    cursor: pointer;
+}
 
 .openingBlock:hover {
     border: solid #576CE8;
