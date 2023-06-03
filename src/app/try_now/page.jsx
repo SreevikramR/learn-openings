@@ -1,18 +1,26 @@
 "use client"
 import { useChessboard } from "@/context/BoardContext"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import NavbarComponent from "@/components/navbar/Navbar"
 import MoveTable from "@/components/moveTable/MoveTable"
 import LearnBoard from "@/components/chessboard/LearnBoard"
+import RegisterForm from "@/components/forms/RegisterForm"
 
 function TrialPage() {
-    const {openingName, openingLine} = useChessboard();
+    const {openingName, openingLine, openingComplete} = useChessboard();
+    const [showRegister, setShowRegister] = useState(false)
 
     useEffect(() => {
         if(openingLine === "") {
             window.location.href = "/"
         }
     }, [])
+
+    useEffect(() => {
+        if(openingComplete) {
+            setShowRegister(true)
+        }
+    }, [openingComplete])
 
     return(
         <>
@@ -35,6 +43,23 @@ function TrialPage() {
             </main>
             <div className="mt-5 text-3xl italic text-center hidden lg:block">
                 Create a FREE account to access all the openings and variations!
+            </div>
+
+            <div class={"w-full transition-all ease-in-out duration-1000 h-full fixed inset-0 bg-[rgba(48,48,48,0.5)] flex-col items-center justify-center z-10" + (showRegister ? " flex" : " hidden")}>
+                <div class="w-3/4 md:w-3/5 xl:w-2/5 px-7 py-7 pt-3 text-center bg-black shadow-xl rounded">
+                    <h2 class="my-2 pb-2 text-2xl lg:text-4xl font-semibold">Register</h2>
+
+                    <RegisterForm />
+
+                    <p class="my-2 text-lg">Create a FREE Account to gain access to all the openings and variations!</p>
+                    
+                </div>
+                <div class="fixed top-10 right-10 text-white cursor-pointer z-10" onClick={() => setShowRegister(false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-10 h-10">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </div>
             </div>
         </>
     )

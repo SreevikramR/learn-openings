@@ -6,7 +6,7 @@ import Script from 'next/script'
 import { Oxanium } from 'next/font/google'
 
 export const metadata = {
-	title: 'Openigns 101',
+	title: 'Openings 101',
 	description: 'Learn Chess openings and practice them with our interactive trainer.',
 }
 
