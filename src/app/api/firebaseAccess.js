@@ -3,25 +3,31 @@ import { getDoc, doc, setDoc, collection, getDocs } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 import { getDataLocal, storeDataLocal } from "./localStorage";
 
-let firstName = null;
-let loggedInUser = null;
 let openings = [];
 let openingData = [];
 let previousOpeningName;
 let openingLines;
 let lastChecked = 0;
 
-export async function getfName() {
-    if (loggedInUser != auth.currentUser.uid) {
+export async function getName() {
+    if (auth.currentUser.uid != null) {
         const docRef = doc(db, "users", auth.currentUser.uid);
         const packet = await getDoc(docRef);
-        const data = packet.data().fName;
-        firstName = data;
-        loggedInUser = auth.currentUser.uid;
-        return firstName;
+        if(packet.data() === undefined) {
+            return undefined;
+        }
+        const data = packet.data().name;
+        storeDataLocal("name", data);
+        return data;
     } else {
-        return firstName;
+        return getDataLocal("name");
     }
+}
+
+export async function signUserOut() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("name");
+    auth.signOut();
 }
 
 export async function checkUsernameExists(username) {
@@ -34,10 +40,25 @@ export async function checkUsernameExists(username) {
     }
 }
 
-export async function createUser(firstName, lastName, username) {
+export async function getUsername() {
+    if(getDataLocal("username") !== false) {
+        return getDataLocal("username")
+    } else {
+        const docRef = doc(db, "users", auth.currentUser.uid);
+        const data = await getDoc(docRef);
+        if(data.data() === undefined) {
+            return undefined;
+        }
+        if(data.data().username !== undefined){
+            storeDataLocal("username", data.data().username)
+        }
+        return data.data().username;
+    }
+}
+
+export async function createUser(username) {
     await setDoc(doc(db, "users", auth.currentUser.uid), {
-        fName: firstName,
-        lName: lastName,
+        name: auth.currentUser.displayName,
         uid: auth.currentUser.uid,
         username: username,
     });

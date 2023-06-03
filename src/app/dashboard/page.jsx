@@ -7,6 +7,7 @@ import train from '../../../public/train-logo.jpg'
 import Image from 'next/image'
 import { auth } from '@/firebase'
 import { useRouter } from 'next/navigation'
+import { signUserOut } from '../api/firebaseAccess'
 
 const Dashboard = () => {
 	const router = useRouter()
@@ -38,8 +39,8 @@ const Dashboard = () => {
 		}
     }, []);
 
-	const handleSignOut = () => {
-		auth.signOut()
+	const handleSignOut = async () => {
+		await signUserOut()
 		router.push("/")
 	}
 

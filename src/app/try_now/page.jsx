@@ -34,7 +34,7 @@ function TrialPage() {
                 </div>
             </main>
             <div className="mt-5 text-3xl italic text-center hidden lg:block">
-                Create an account to access more openings and variations!
+                Create a FREE account to access all the openings and variations!
             </div>
         </>
     )

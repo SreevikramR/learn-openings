@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { auth } from '@/firebase'
-import { getfName } from '@/app/api/firebaseAccess'
+import { getName, getUsername } from '@/app/api/firebaseAccess'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
+import { signUserOut } from '@/app/api/firebaseAccess'
 
 const NavbarComponent = ({ fixed }) => {
 	const router = useRouter()
@@ -18,15 +19,22 @@ const NavbarComponent = ({ fixed }) => {
 			if(stateChanging) return;
 			stateChanging = true;
 			if (user) {
-				setIsLoggedIn(true)
-				setFirstName()
+				getUsername().then((username) => {
+					console.log(username)
+                    if (username === undefined) {
+                        router.push("/onboarding")
+                    } else {
+						setIsLoggedIn(true)
+						setFirstName()
+					}
+                })
 			}
 			stateChanging = false;
 		});
 	}, [])
 
-	const handleSignOut = () => {
-		auth.signOut()
+	const handleSignOut = async () => {
+		await signUserOut()
 		router.push("/")
 	}
 
@@ -108,7 +116,10 @@ const NavbarComponent = ({ fixed }) => {
 	}
 
 	async function setFirstName() {
-		const name = await getfName()
+		const name = await getName()
+		if(name === undefined) {
+			setIsLoggedIn(false)
+		}
 		setName(name)
 	}
 
