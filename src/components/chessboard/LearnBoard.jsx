@@ -4,6 +4,7 @@ import { Chess } from "chess.js";
 import MoveSelector from "../../scripts/MoveSelector";
 import React, { useState, useEffect } from 'react'
 import { openingLineCompleted } from "@/app/api/firebaseAccess";
+import LoadingOverlay from "../overlay/LoadingOverlay";
 
 let nextMove;
 let tempMoveHistory = []
@@ -11,7 +12,7 @@ let arrowArray = []
 let playedFirstMove = false;
 
 const LearnBoard = () => {
-	const {moveHistory, setMoveHistory, openingLine, openingName, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor} = useChessboard()
+	const {moveHistory, setMoveHistory, openingLine, openingName, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, isBoardLoaded, setIsBoardLoaded} = useChessboard()
 
 	tempMoveHistory = moveHistory;
 
@@ -49,6 +50,7 @@ const LearnBoard = () => {
 		} else {
 			setBoardWidth(window.innerWidth / 3);
 		}
+		setIsBoardLoaded(true)
 	}
 
 	async function blackFirstMove(){
@@ -207,6 +209,9 @@ const LearnBoard = () => {
 				customArrowColor="rgb(87, 109, 232, 0.9)"
 				boardOrientation={playerColor}
 			/>
+			<div className={"justify-center" + (!isBoardLoaded ? " flex" : " hidden")}>
+                <LoadingOverlay/>
+            </div>
 		</div>
 	);
 }

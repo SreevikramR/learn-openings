@@ -6,8 +6,10 @@ import { getName, getUsername } from '@/app/api/firebaseAccess'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
 import { signUserOut } from '@/app/api/firebaseAccess'
+import { useChessboard } from '@/context/BoardContext'
 
 const NavbarComponent = ({ fixed }) => {
+	const { setIsBoardLoaded } = useChessboard();
 	const router = useRouter()
 	const [name, setName] = useState('')
 	const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -20,7 +22,6 @@ const NavbarComponent = ({ fixed }) => {
 			stateChanging = true;
 			if (user) {
 				getUsername().then((username) => {
-					console.log(username)
                     if (username === undefined) {
                         router.push("/onboarding")
                     } else {
@@ -31,6 +32,10 @@ const NavbarComponent = ({ fixed }) => {
 			}
 			stateChanging = false;
 		});
+
+		if(window.location.pathname !== "/try_now" || window.location.pathname !== "/train" || window.location.pathname !== "/learn") {
+			setIsBoardLoaded(false);
+		}
 	}, [])
 
 	const handleSignOut = async () => {

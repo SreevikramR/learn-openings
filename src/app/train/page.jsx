@@ -6,14 +6,13 @@ import styles from "../styles/learnPage.module.css"
 import TrainBoard from '@/components/chessboard/TrainBoard'
 import MoveTable from '@/components/moveTable/MoveTable'
 import { getMoveSequence } from '../api/firebaseAccess'
-import { getAlternateLine } from '../api/firebaseAccess'
 import VariationTable from '@/components/variationTable/VariationTable'
 import { useRouter } from 'next/navigation'
 import PageWrapper from '@/components/wrapper/pageWrapper'
 
 const TrainPage = () => {
     const router = useRouter()
-    const {setMoveHistory, openingLine, setOpeningLine, openingName, setMoveSequence, setOpeningComplete} = useChessboard()
+    const {setMoveHistory, openingLine, openingName, setMoveSequence, setOpeningComplete} = useChessboard()
     const [movesTabActive, setMovesTabActive] = useState(true);
 
     useEffect(() => {
@@ -28,13 +27,6 @@ const TrainPage = () => {
     useEffect(() => {
         setMoveHistory([]);
     }, []);
-
-    async function changeLine() {
-        setOpeningLine(await getAlternateLine(openingLine));
-        setMoveSequence(getMoveSequence(openingLine));
-        setOpeningComplete(false)
-        setMoveHistory([]);
-    }
 
     return (
         <>
@@ -72,7 +64,6 @@ const TrainPage = () => {
                         </div>
                     </div>
                 </div>
-                {/* <button onClick={changeLine}>Try another line!</button> */}
             </PageWrapper>
         </>
     )

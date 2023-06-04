@@ -4,6 +4,7 @@ import { Chess } from "chess.js";
 import MoveSelector from "@/scripts/MoveSelector";
 import { Chessboard } from "react-chessboard";
 import { useChessboard } from "@/context/BoardContext";
+import LoadingOverlay from "../overlay/LoadingOverlay";
 
 let previousLine = "Cozio Defense";
 let nextMove;
@@ -12,7 +13,7 @@ let playedFirstMove = false
 
 const TrainBoard = () => {
 
-	const {moveHistory, setMoveHistory, openingLine, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, setPlayerColor} = useChessboard()
+	const {moveHistory, setMoveHistory, openingLine, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, setIsBoardLoaded, isBoardLoaded} = useChessboard()
 
 	tempMoveHistory = moveHistory;
 	
@@ -52,6 +53,7 @@ const TrainBoard = () => {
 				setBoardWidth(window.innerWidth / 3);
 			}
 		}, 100)
+		setIsBoardLoaded(true)
 	}
 
 	async function blackFirstMove(){
@@ -194,6 +196,9 @@ const TrainBoard = () => {
 				animationDuration={750}
 				boardOrientation={playerColor}
 			/>
+			<div className={"justify-center" + (!isBoardLoaded ? " flex" : " hidden")}>
+                <LoadingOverlay/>
+            </div>
 		</div>
 	);
 };

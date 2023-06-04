@@ -8,10 +8,12 @@ import styles from "@/app/styles/openingTiles.module.css"
 import PopUp from '@/components/popUp/PopUp'
 import PageWrapper from '@/components/wrapper/pageWrapper'
 import { getOpeningsData } from '../api/firebaseAccess'
+import LoadingOverlay from '@/components/overlay/LoadingOverlay'
 
 const TrainPick = () => {
 	const {setPopUpType, setAllOpenings, setOpeningName, setOpeningLine, setLineVariations, setPlayerColor} = useChessboard()
 	const [tiles, setTiles] = useState()
+	const [pageLoading, setPageLoading] = useState(true)
 
 	useEffect(() => {
 		getOpeningData().then((openingsList) => {
@@ -72,6 +74,9 @@ const TrainPick = () => {
 			row = []
 		}
 		setTiles(tempTiles)
+		setTimeout(() => {
+			setPageLoading(false)
+		}, 50)
 	}
 
 	const _train = () => {
@@ -113,7 +118,12 @@ const TrainPick = () => {
 				<div className="flex justify-center">
 					<span className="lg:text-4xl text-3xl font-bold">Pick Opening to Train</span>
 				</div>
-				<_train/>
+				<div className={"justify-center" + (pageLoading ? " flex" : " hidden")}>
+					<LoadingOverlay/>
+				</div>
+				<div className={"justify-center" + (!pageLoading ? " flex" : " hidden")}>
+					<_train/>
+				</div>
 			</PageWrapper>
 		</>
 	)

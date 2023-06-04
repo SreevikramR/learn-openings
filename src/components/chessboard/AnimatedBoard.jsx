@@ -3,6 +3,7 @@ import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import { useEffect, useState } from "react";
 import { getAlternateLine, getMoveSequence, setFirstLine } from "@/app/api/firebaseAccess";
+import LoadingOverlay from "../overlay/LoadingOverlay";
 
 let firstRun = true;
 
@@ -10,6 +11,7 @@ const AnimatedBoard = () => {
     const [game, setGame] = useState(new Chess());
     const [position, setPosition] = useState();
     const [boardWidth, setBoardWidth] = useState(500);
+    const [isBoardLoaded, setIsBoardLoaded] = useState(false);
 
     let moveSequence = [];
     let openingVariation;
@@ -23,6 +25,7 @@ const AnimatedBoard = () => {
             setBoardWidth(window.innerWidth / 3);
         }
         playMoves();
+        setIsBoardLoaded(true);
         window.addEventListener('resize', ()=> {
             if(window.innerWidth < 450) {
                 setBoardWidth(window.innerWidth / 1.5);
@@ -79,13 +82,18 @@ const AnimatedBoard = () => {
 
 	return (
 		<>
-			<Chessboard 
-                boardWidth={boardWidth}
-                position={position}
-                isDraggablePiece={isDraggable}
-                animationDuration={750}
-                id="chessboard"
-            />
+            <div className={isBoardLoaded ? "block" : "hidden"}>
+                <Chessboard 
+                    boardWidth={boardWidth}
+                    position={position}
+                    isDraggablePiece={isDraggable}
+                    animationDuration={750}
+                    id="chessboard"
+                />
+            </div>
+            <div className={!isBoardLoaded ? "block" : "hidden"}>
+                <LoadingOverlay/>
+            </div>
 		</>
 	);
 };

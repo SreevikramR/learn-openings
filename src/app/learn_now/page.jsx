@@ -8,10 +8,12 @@ import styles from "@/app/styles/openingTiles.module.css"
 import PopUp from '@/components/popUp/PopUp'
 import PageWrapper from '@/components/wrapper/pageWrapper'
 import { getOpeningsData } from '../api/firebaseAccess'
+import LoadingOverlay from '@/components/overlay/LoadingOverlay'
 
 const LearnPick = () => {
-	const { setAllOpenings, openingLine, setOpeningName, setPopUpType, setOpeningLine, setLineVariations, setPlayerColor, setMoveSequence, moveSequence} = useChessboard()
+	const { setAllOpenings, openingLine, setOpeningName, setPopUpType, setOpeningLine, setLineVariations, setPlayerColor, setMoveSequence} = useChessboard()
 	const [tiles, setTiles] = useState()
+	const [pageLoading, setPageLoading] = useState(true)
 
 	useEffect(() => {
 		getOpeningData().then((openingsList) => {
@@ -72,6 +74,9 @@ const LearnPick = () => {
 			row = []
 		}
 		setTiles(tempTiles)
+		setTimeout(() => {
+			setPageLoading(false)
+		}, 50)
 	}
 
 	async function handleTileClick(opening) {
@@ -115,7 +120,12 @@ const LearnPick = () => {
 				<div className="flex justify-center">
 					<span className="lg:text-4xl text-3xl font-bold">Pick Opening to Learn</span>
 				</div>
-				<_learn/>
+				<div className={"justify-center" + (pageLoading ? " flex" : " hidden")}>
+					<LoadingOverlay/>
+				</div>
+				<div className={"justify-center" + (!pageLoading ? " flex" : " hidden")}>
+					<_learn/>
+				</div>
 			</PageWrapper>
 		</>
 	)

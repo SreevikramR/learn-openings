@@ -23,6 +23,7 @@ export const BoardProvider = ({ children }) => {
 	const [openingComplete, setOpeningComplete] = useState(false)
 	const [playerColor, setPlayerColor] = useState('white')
 	const [mode, setMode] = useState('')
+	const [isBoardLoaded, setIsBoardLoaded] = useState(false)
 
 	const value = {
 		openingName,
@@ -53,6 +54,8 @@ export const BoardProvider = ({ children }) => {
 		setPlayerColor,
 		mode,
 		setMode,
+		isBoardLoaded,
+		setIsBoardLoaded,
 	}
 	
 
