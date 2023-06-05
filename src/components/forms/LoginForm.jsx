@@ -106,14 +106,14 @@ const LoginForm = () => {
             
             <div className="flex flex-row justify-center items-center text-xl" onClick={() => googleSignInPopup()}>
                 <div className='p-3 rounded-lg cursor-pointer border-2 flex justify-center items-center'>
-                    <Image src={googleImg} width={35} height={35} className='mr-3'/>
+                    <Image src={googleImg} alt='Google' width={35} height="auto" className='mr-3'/>
                     Login with Google
                 </div>
             </div>
 
             <div className="flex flex-row justify-center items-center text-xl mt-5" onClick={() => gitHubSignInPopup()}>
                 <div className='p-3 rounded-lg cursor-pointer border-2 flex justify-center items-center'>
-                    <Image src={gitHubImg} width={35} height={35} className='mr-3'/>
+                    <Image src={gitHubImg} alt='GitHub' width={35} height="auto" className='mr-3'/>
                     Login with GitHub
                 </div>
             </div>

@@ -33,7 +33,9 @@ const NavbarComponent = ({ fixed }) => {
 			stateChanging = false;
 		});
 
-		if(window.location.pathname !== "/try_now" || window.location.pathname !== "/train" || window.location.pathname !== "/learn") {
+		const url = window.location.pathname;
+
+		if(url !== "/try_now" || url !== "/train" || url !== "/learn" || url.includes("/user/")) {
 			setIsBoardLoaded(false);
 		}
 	}, [])
@@ -58,7 +60,7 @@ const NavbarComponent = ({ fixed }) => {
 							<a className={"text-xl font-semibold leading-relaxed lg:hidden inline-block mr-4 py-2 whitespace-nowrap text-white" + (isLoggedIn ? " hidden" : " inline-block")} href="/login">
 								Login
 							</a>
-							<a className={"text-xl font-semibold leading-relaxed lg:hidden mr-4 py-2 whitespace-nowrap text-white" + (isLoggedIn ? " inline-block" : " hidden")} href="/">
+							<a className={"text-xl font-semibold leading-relaxed lg:hidden mr-4 py-2 whitespace-nowrap text-white" + (isLoggedIn ? " inline-block" : " hidden")} href="/profile">
 								Hi {name}
 							</a>
 						</div>
@@ -101,7 +103,9 @@ const NavbarComponent = ({ fixed }) => {
 						<div className={"lg:" + (isLoggedIn ? "flex" : "hidden") + " flex-grow items-center hidden"} id="example-navbar-danger">
 							<ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
 								<li className="nav-item">
-									<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white pointer-none lg:border-l-2 lg:border-l-zinc-800">Hi {name}</span>
+									<Link href="/profile">
+										<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white pointer-none lg:border-l-2 lg:border-l-zinc-800">Hi {name}</span>
+									</Link>
 								</li>
 								<li className="nav-item py-3 lg:py-0">
 									<Link href="/dashboard">

@@ -31,7 +31,8 @@ export async function signUserOut() {
 }
 
 export async function checkUsernameExists(username) {
-    const docRef = doc(db, "usernames", username);
+    const name = username.toLowerCase();
+    const docRef = doc(db, "usernames", name);
     const data = await getDoc(docRef);
     if (data.data() == undefined) {
         return false;
@@ -57,12 +58,20 @@ export async function getUsername() {
 }
 
 export async function createUser(username) {
+    const name = username.toLowerCase();
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    const date = new Date()
+    let month = months[date.getMonth()];
+    let day = date.getDate()
+    let year = date.getFullYear()
+    const creationTime = `${month} ${day}, ${year}`
     await setDoc(doc(db, "users", auth.currentUser.uid), {
         name: auth.currentUser.displayName,
         uid: auth.currentUser.uid,
-        username: username,
+        username: name,
+        accountCreationDate: creationTime,
     });
-    await setDoc(doc(db, "usernames", username), {
+    await setDoc(doc(db, "usernames", name), {
         uid: auth.currentUser.uid,
     });
 }
