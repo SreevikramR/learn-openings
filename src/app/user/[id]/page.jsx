@@ -6,7 +6,7 @@ import NavbarComponent from '@/components/navbar/Navbar';
 import PageWrapper from '@/components/wrapper/pageWrapper';
 import UserProfile from '@/components/userProfile/UserProfile';
 
-const profilePage = ({ params }) => {
+const ProfilePage = ({ params }) => {
     const id = params.id
     
     const { isBoardLoaded } = useChessboard();
@@ -26,4 +26,4 @@ const profilePage = ({ params }) => {
     )
 }
 
-export default profilePage
+export default ProfilePage
