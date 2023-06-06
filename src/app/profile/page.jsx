@@ -9,7 +9,7 @@ import PageWrapper from '@/components/wrapper/pageWrapper';
 import UserProfile from '@/components/userProfile/UserProfile';
 import { getUsername } from '../api/firebaseAccess';
 
-const profilePage = () => {
+const ProfilePage = () => {
     const { isBoardLoaded } = useChessboard();
     const [username, setUsername] = useState(false);
 
@@ -43,4 +43,4 @@ const profilePage = () => {
     )
 }
 
-export default profilePage
+export default ProfilePage
