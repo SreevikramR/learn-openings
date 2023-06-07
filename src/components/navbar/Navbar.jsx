@@ -54,7 +54,7 @@ const NavbarComponent = ({ fixed }) => {
 							<button className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none" type="button" onClick={() => setNavbarOpen(!navbarOpen)}>
 								<i className="fas fa-bars"></i>
 							</button>
-							<a className="text-base lg:text-4xl font-semibold leading-relaxed hidden lg:inline-block mr-4 py-2 whitespace-nowrap text-white" href="/">
+							<a className="text-base lg:text-4xl font-semibold leading-relaxed hidden lg:inline-block mr-4 py-2 whitespace-nowrap text-white" href={(isLoggedIn ? "/dashboard" : "/")}>
 								Openings 101
 							</a>
 							<a className={"text-xl font-semibold leading-relaxed lg:hidden inline-block mr-4 py-2 whitespace-nowrap text-white" + (isLoggedIn ? " hidden" : " inline-block")} href="/login">
@@ -102,18 +102,12 @@ const NavbarComponent = ({ fixed }) => {
 
 						<div className={"lg:" + (isLoggedIn ? "flex" : "hidden") + " flex-grow items-center hidden"} id="example-navbar-danger">
 							<ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+								{/* <li className="flex flex-wrap items-center">
+									<button className="text-base leading-snug text-white cursor-pointer mx-1" type='submit'><i class="fa fa-search"></i></button>
+								</li> */}
 								<li className="nav-item">
 									<Link href="/profile">
-										<span className="mx-1 px-3 py-2 flex items-center text-xl font-semibold italic leading-snug text-white pointer-none lg:border-l-2 lg:border-l-zinc-800">Hi {name}</span>
-									</Link>
-								</li>
-								<li className="nav-item py-3 lg:py-0">
-									<Link href="/dashboard">
-										<span className='lg:inline-flex lg:w-auto px-1 lg:m-0 py-2 w-full lg:px-3 lg:py-2 rounded-xl border-2 border-blue-700 text-white font-bold items-center justify-center hover:border-white hover:text-white text-xl hover:cursor-pointer bg-blue-600'>
-											<span className='mx-1'>
-												Dashboard
-											</span>
-										</span>
+										<span className="mx-1 px-3 py-2 flex items-center align-middle text-xl font-semibold italic leading-snug text-white pointer-none">Hi {name}</span>
 									</Link>
 								</li>
 							</ul>

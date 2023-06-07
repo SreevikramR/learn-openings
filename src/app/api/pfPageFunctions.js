@@ -23,3 +23,19 @@ export async function getName(uid) {
     const docSnap = await getDoc(docRef);
     return docSnap.data().name;
 }
+
+export async function getTotalNumVariations() {
+    const docRef = doc(db, "openingsData", "allOpenings");
+    const docSnap = await getDoc(docRef);
+    return docSnap.data().numVariations;
+}
+
+export async function getCompletedVariations(uid) {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    const white_learn = docSnap.data().white_learn;
+    const black_learn = docSnap.data().black_learn;
+    const white_train = docSnap.data().white_train;
+    const black_train = docSnap.data().black_train;
+    return [white_learn, black_learn, white_train, black_train];
+}
