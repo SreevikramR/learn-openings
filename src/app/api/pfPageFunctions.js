@@ -1,5 +1,8 @@
 import { db } from "@/firebase";
-import { getDoc, doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { getDoc, doc, updateDoc, deleteField, deleteDoc } from "firebase/firestore";
+import { deleteUser } from "firebase/auth";
+import { auth } from "@/firebase";
+import { getUsername } from "./firebaseAccess";
 
 export async function getUID(username) {
     const docRef = doc(db, "usernames", username);
@@ -38,4 +41,35 @@ export async function getCompletedVariations(uid) {
     const white_train = docSnap.data().white_train;
     const black_train = docSnap.data().black_train;
     return [white_learn, black_learn, white_train, black_train];
+}
+
+export async function resetUserData() {
+    const docRef = doc(db, "users", auth.currentUser.uid)
+    try {
+        await updateDoc(docRef, {
+            white_learn: deleteField(),
+            black_learn: deleteField(),
+            white_train: deleteField(),
+            black_train: deleteField(),
+        })
+        return true
+    }
+    catch (e) {
+        return e
+    }
+}
+
+export async function deleteUserData() {
+    const docRef = doc(db, "users", auth.currentUser.uid)
+    const username = await getUsername()
+    const docRef2 = doc(db, "usernames", username)
+    try {
+        await deleteDoc(docRef2)
+        await deleteDoc(docRef)
+        await deleteUser(auth.currentUser)
+        return true
+    }
+    catch (e) {
+        return(e)
+    }
 }

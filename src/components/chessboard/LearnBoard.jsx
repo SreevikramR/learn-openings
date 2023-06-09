@@ -22,7 +22,6 @@ const LearnBoard = () => {
 		setGame(new Chess());
 		initBoardWidth();
 		if(playerColor == 'black'){
-			console.log('black playing')
 			setTimeout(() => {
 				if(!playedFirstMove){
 				blackFirstMove()
@@ -31,7 +30,6 @@ const LearnBoard = () => {
 			}, 1500);
 		}
 		window.addEventListener('resize', ()=> {
-			console.log('resize called')
             if(window.innerWidth < 450) {
 				setBoardWidth(window.innerWidth / 1.5);
 			} else if(window.innerWidth < 850) {
@@ -58,8 +56,6 @@ const LearnBoard = () => {
 		gameBackup.loadPgn(game.pgn());
 		const gameCopy = game;
 		gameCopy.loadPgn(game.pgn());
-		//console.log(move)
-		//console.log(moveSequence)
 		await gameCopy.move(moveSequence[0]);
 		await setGame(gameCopy);
 		await setPosition(game.fen());
@@ -74,7 +70,6 @@ const LearnBoard = () => {
 		tempMoveHistory = gameCopy.history();
 		let expectedMove = MoveSelector(tempMoveHistory, openingLine);
 		if(expectedMove != undefined) {
-			//console.log(expectedMove)
 			gameCopy.move(expectedMove)
 			let history = gameCopy.history({verbose: true})
 			let tempArray = []
@@ -107,7 +102,6 @@ const LearnBoard = () => {
 		gameBackup.loadPgn(game.pgn());
 		const gameCopy = game;
 		gameCopy.loadPgn(game.pgn());
-		//console.log(move)
 		gameCopy.move(move);
 		setGame(gameCopy);
 		setPosition(game.fen());
@@ -115,9 +109,7 @@ const LearnBoard = () => {
 		//moveHistory = gameCopy.history();
 		setMoveHistory(gameCopy.history());
 		tempMoveHistory = gameCopy.history();
-		//console.log("last move played: " + moveHistory[moveHistory.length - 1])
 		nextMove = MoveSelector(tempMoveHistory, openingLine);
-		//console.log(nextMove)
 
 		if (nextMove === "invalid") {
 			setMoveResult("wrong");
@@ -133,17 +125,14 @@ const LearnBoard = () => {
 			setOpeningComplete(true)
 			umami.track('Learn - variation complete')
 			openingLineCompleted(openingName, openingLine, playerColor, "learn")
-			//console.log("move sequence complete")
 		} else {
 			setTimeout(() => {
 				setMoveResult("correct");
-
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
 					umami.track('Learn - variation complete')
 					openingLineCompleted(openingName, openingLine, playerColor, "learn")
 				}
-
 				playMove(nextMove);
 			}, 250);
 		}
@@ -152,11 +141,9 @@ const LearnBoard = () => {
 	const playMove = (nextMove) => {
 		const gameCopy = game;
 		gameCopy.loadPgn(game.pgn());
-		//console.log(nextMove)
 		gameCopy.move(nextMove);
 		setGame(gameCopy);
 		setPosition(game.fen());
-		//moveHistory.push(nextMove)
 		setMoveHistory(gameCopy.history());
 		getExpectedMove()
 	};

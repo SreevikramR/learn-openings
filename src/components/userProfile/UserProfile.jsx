@@ -1,14 +1,18 @@
 "use client"
 import React, { useState, useEffect } from 'react'
 import { getUID, getName, getTotalNumVariations, getCompletedVariations } from '@/app/api/pfPageFunctions';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/firebase';
 import { useChessboard } from '@/context/BoardContext';
-import UserStats from './UserStats';
+import UserStats from './profileComponents/UserStats';
+import DangerZone from './profileComponents/DangerZone';
 
 const UserProfile = ({ username }) => {
     const [name, setName] = useState();
     const [accountCreationDate, setAccountCreationDate] = useState();
+    const [uid, setUid] = useState();
     const [userExists, setUserExists] = useState(false);
+    const [isAccountOwner, setIsAccountOwner] = useState(false);
     const [numVariations, setNumVariations] = useState();
     const [completedVariations, setCompletedVariations] = useState([]);
     const [percentages, setPercentages] = useState([]);
@@ -18,11 +22,19 @@ const UserProfile = ({ username }) => {
     const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
     useEffect(() => {
-        getData();
+        onAuthStateChanged(auth, (user) => {
+            getData(user)
+        })
     }, []);
 
-    const getData = async () => {
+    const getData = async (user) => {
         let userUID = await getUID(username)
+        setUid(userUID);
+        if(user.uid === userUID) {
+            setIsAccountOwner(true)
+        } else {
+            setIsAccountOwner(false)
+        }
         if(!userUID) {
             setUserExists(false)
         } else {
@@ -35,7 +47,6 @@ const UserProfile = ({ username }) => {
             let year = date.getFullYear()
             setAccountCreationDate(`${month} ${day}, ${year}`)
             let numVariations = await getTotalNumVariations();
-            console.log(numVariations)
             setNumVariations(numVariations);
             let completedVariations = await getCompletedVariations(userUID);
             let variationsArray = [];
@@ -84,6 +95,9 @@ const UserProfile = ({ username }) => {
                         <div className='mt-2'>Member since {accountCreationDate}</div>
                     </div>
                     <UserStats completedVariations={completedVariations} totalVariations={numVariations} percentages={percentages}/>
+                    <div className='text-2xl mt-5'>
+                        <DangerZone isAccountOwner={isAccountOwner} uid={uid}/>
+                    </div>
                 </div>
             </div>
             <div className={"w-full justify-center" + (!userExists ? " flex" : " hidden")}>
