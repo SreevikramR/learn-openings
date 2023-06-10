@@ -43,7 +43,7 @@ const PopUp = () => {
 		fullDescription = [];
 		for(let i = 0; i < descriptions.length; i++) {
 			let paragraph = (
-				<p className='p-1 pt-3 text-xs lg:text-base font-thin'>
+				<p className='p-1 pt-3 text-xs lg:text-base font-thin' key={i}>
 					{descriptions[i]}
 				</p>
 			)

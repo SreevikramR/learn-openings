@@ -66,7 +66,7 @@ const LearnPick = () => {
 				row.push(_openingBlock)
 			}
 			let rowBlock = (
-				<div className={styles.gridrow}>
+				<div className={styles.gridrow} key={i}>
 					{row}
 				</div>
 			)
