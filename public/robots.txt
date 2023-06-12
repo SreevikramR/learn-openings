@@ -1,0 +1,4 @@
+Sitemap: https://openings101.vercel.app/sitemap.xml
+
+User-agent: *
+Allow: /*
