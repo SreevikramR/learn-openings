@@ -5,25 +5,38 @@ import MoveSelector from "@/scripts/MoveSelector";
 import { Chessboard } from "react-chessboard";
 import { useChessboard } from "@/context/BoardContext";
 import LoadingOverlay from "../overlay/LoadingOverlay";
+import { openingLineCompleted } from "@/app/api/firebaseAccess";
 
 let previousLine = "Cozio Defense";
 let nextMove;
 let tempMoveHistory = []
 let playedFirstMove = false
 
-const TrainBoard = () => {
+const TrainBoard = ({ moveSequence, openingName, openingLine }) => {
 
-	const {moveHistory, setMoveHistory, openingLine, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, setIsBoardLoaded, isBoardLoaded} = useChessboard()
-
-	tempMoveHistory = moveHistory;
+	const {
+		setMoveHistory,
+		setMoveResult,
+		game,
+		setGame,
+		position, 
+		setPosition,
+		setOpeningComplete, 
+		openingComplete, 
+		playerColor, 
+		setIsBoardLoaded, 
+		isBoardLoaded
+	} = useChessboard()
 	
 	const [boardWidth, setBoardWidth] = useState(500);
 
 	useEffect(() => {
-		setGame(new Chess());
+		const gameCopy = new Chess();
+		game.loadPgn(gameCopy.pgn());
+		setPosition(game.fen());
+		setOpeningComplete(false)
 		initBoardWidth();
 		if(playerColor == 'black'){
-			console.log('black playing')
 			setTimeout(() => {
 				if(!playedFirstMove){
 					blackFirstMove()
@@ -61,7 +74,6 @@ const TrainBoard = () => {
 		gameBackup.loadPgn(game.pgn());
 		const gameCopy = game;
 		gameCopy.loadPgn(game.pgn());
-		//console.log(move)
 		console.log(moveSequence)
 		await gameCopy.move(moveSequence[0]);
 		await setGame(gameCopy);
@@ -97,7 +109,7 @@ const TrainBoard = () => {
 		}
 	}, []);
 
-	const makeMove = (move) => {
+	const makeMove = async (move) => {
 		const gameBackup = game;
 		gameBackup.loadPgn(game.pgn());
 		const gameCopy = game;
@@ -106,12 +118,10 @@ const TrainBoard = () => {
 		setGame(gameCopy);
 		setPosition(game.fen());
 
-		//moveHistory = gameCopy.history();
 		setMoveHistory(gameCopy.history());
 		tempMoveHistory = gameCopy.history();
-		//console.log("last move played: " + moveHistory[moveHistory.length - 1])
-		nextMove = MoveSelector(tempMoveHistory, openingLine);
-		//console.log(nextMove)
+		nextMove = await MoveSelector(tempMoveHistory, openingName, openingLine);
+		console.log(tempMoveHistory, nextMove, openingName, openingLine)
 
 		if (nextMove === "invalid") {
 			setMoveResult("wrong");
@@ -123,16 +133,16 @@ const TrainBoard = () => {
 		} else if (nextMove == null) {
 			setMoveResult("correct");
 			setOpeningComplete(true)
-			umami.track('Train - variation complete')
-			//console.log("move sequence complete")
+			openingLineCompleted(openingName, openingLine, playerColor, "train")
+			// umami.track('Train - variation complete')
 		} else {
 			setTimeout(() => {
 				setMoveResult("correct");
 
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
-					umami.track('Train - variation complete')
-					//console.log("move sequence complete")
+					openingLineCompleted(openingName, openingLine, playerColor, "train")
+					// umami.track('Train - variation complete')
 				}
 
 				playMove(nextMove);
@@ -146,7 +156,6 @@ const TrainBoard = () => {
 		gameCopy.move(nextMove);
 		setGame(gameCopy);
 		setPosition(game.fen());
-		//moveHistory.push(nextMove)
 		setMoveHistory(gameCopy.history());
 	};
 

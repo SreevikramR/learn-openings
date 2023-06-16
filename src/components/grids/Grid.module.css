@@ -1,0 +1,37 @@
+.openingBlock {
+    width: 300px;
+    height: calc(width);
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-top: 15px;
+    float: left;
+    margin-top: 2vh;
+    background-color: black;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    vertical-align: middle;
+    border: 3px solid rgb(56, 56, 56);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.openingBlock:hover {
+    border: solid #576CE8;
+    float: inline-start;
+}
+
+.gridrow {
+    margin-bottom: 1vh;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+}

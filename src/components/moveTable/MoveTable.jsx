@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useChessboard } from "@/context/BoardContext";
 import styles from "./MoveTable.module.css";
 
-const MoveTable = () => {
-	const {moveHistory, openingLine, moveResult, moveSequence, openingComplete, setOpeningComplete, playerColor, setPlayerColor} = useChessboard()
+const MoveTable = ({ moveSequence, openingLine }) => {
+	const {moveHistory, moveResult, openingComplete, setOpeningComplete, playerColor, setPlayerColor} = useChessboard()
 	const [isPlayerWhite, setIsPlayerWhite] = useState(true);
 
 	useEffect(() => {

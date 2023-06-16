@@ -1,8 +1,9 @@
+"use client"
+import React, { useState, useEffect } from 'react'
 import { useChessboard } from "@/context/BoardContext";
 import { Chessboard } from "react-chessboard";
 import { Chess } from "chess.js";
 import MoveSelector from "../../scripts/MoveSelector";
-import React, { useState, useEffect } from 'react'
 import { openingLineCompleted } from "@/app/api/firebaseAccess";
 import LoadingOverlay from "../overlay/LoadingOverlay";
 
@@ -10,24 +11,28 @@ let nextMove;
 let tempMoveHistory = []
 let arrowArray = []
 let playedFirstMove = false;
+let firstRun = true;
 
-const LearnBoard = () => {
-	const {moveHistory, setMoveHistory, openingLine, openingName, setMoveResult, moveSequence, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, isBoardLoaded, setIsBoardLoaded} = useChessboard()
-
-	tempMoveHistory = moveHistory;
+const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
+	const { setMoveHistory, setMoveResult, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, isBoardLoaded, setIsBoardLoaded} = useChessboard()
 
 	const [boardWidth, setBoardWidth] = useState(500);
 
 	useEffect(() => {
-		setGame(new Chess());
+		const gameCopy = new Chess();
+		game.loadPgn(gameCopy.pgn());
+		setPosition(game.fen());
+		setOpeningComplete(false)
 		initBoardWidth();
 		if(playerColor == 'black'){
 			setTimeout(() => {
+				getExpectedMove()
 				if(!playedFirstMove){
-				blackFirstMove()
-				playedFirstMove = true
+					blackFirstMove()
 				}
 			}, 1500);
+		} else {
+			getExpectedMove()
 		}
 		window.addEventListener('resize', ()=> {
             if(window.innerWidth < 450) {
@@ -38,7 +43,25 @@ const LearnBoard = () => {
 				setBoardWidth(window.innerWidth / 3);
 			}
         })
+		firstRun = false;
 	}, []);
+
+	useEffect(() => {
+		if(!firstRun) {
+			const gameCopy = new Chess();
+			game.loadPgn(gameCopy.pgn());
+			setPosition(game.fen());
+			setOpeningComplete(false)
+			if(playerColor == 'black'){
+				setTimeout(() => {
+					blackFirstMove()
+					playedFirstMove = true
+				}, 800);
+			} else {
+				getExpectedMove()
+			}
+		}
+	}, [playerColor]);
 
 	function initBoardWidth() {
 		if(window.innerWidth < 450) {
@@ -60,15 +83,15 @@ const LearnBoard = () => {
 		await setGame(gameCopy);
 		await setPosition(game.fen());
 		await setMoveHistory(gameCopy.history());
-		getExpectedMove()
+		playedFirstMove = true
 	}
 
-	function getExpectedMove() {
+	async function getExpectedMove() {
 		arrowArray = []
 		let gameCopy = new Chess(game.fen());
 		gameCopy.loadPgn(game.pgn());
 		tempMoveHistory = gameCopy.history();
-		let expectedMove = MoveSelector(tempMoveHistory, openingLine);
+		let expectedMove = await MoveSelector(tempMoveHistory, openingName, openingLine);
 		if(expectedMove != undefined) {
 			gameCopy.move(expectedMove)
 			let history = gameCopy.history({verbose: true})
@@ -82,22 +105,7 @@ const LearnBoard = () => {
 		}
 	}
 
-	useEffect(() => {
-		const gameCopy = new Chess();
-		game.loadPgn(gameCopy.pgn());
-		setPosition(game.fen());
-		setOpeningComplete(false)
-		if(playerColor == 'black'){
-			setTimeout(() => {
-				blackFirstMove()
-				playedFirstMove = true
-			}, 800);
-		} else {
-			getExpectedMove()
-		}
-	}, [openingLine, playerColor]);
-
-	const makeMove = (move) => {
+	const makeMove = async (move) => {
 		const gameBackup = game;
 		gameBackup.loadPgn(game.pgn());
 		const gameCopy = game;
@@ -109,11 +117,10 @@ const LearnBoard = () => {
 		//moveHistory = gameCopy.history();
 		setMoveHistory(gameCopy.history());
 		tempMoveHistory = gameCopy.history();
-		nextMove = MoveSelector(tempMoveHistory, openingLine);
+		nextMove = await MoveSelector(tempMoveHistory, openingName, openingLine);
 
 		if (nextMove === "invalid") {
 			setMoveResult("wrong");
-			
 			setTimeout(() => {
 				game.undo();
 				setGame(gameBackup);
@@ -123,14 +130,14 @@ const LearnBoard = () => {
 		} else if (nextMove == null) {
 			setMoveResult("correct");
 			setOpeningComplete(true)
-			umami.track('Learn - variation complete')
+			// umami.track('Learn - variation complete')
 			openingLineCompleted(openingName, openingLine, playerColor, "learn")
 		} else {
 			setTimeout(() => {
 				setMoveResult("correct");
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
-					umami.track('Learn - variation complete')
+					// umami.track('Learn - variation complete')
 					openingLineCompleted(openingName, openingLine, playerColor, "learn")
 				}
 				playMove(nextMove);
@@ -185,7 +192,7 @@ const LearnBoard = () => {
 	};
 
 	return (
-		<div className={"border-8" + (openingComplete ? " border-green-600" : " border-none")}>
+		<div className={"border-8 w-fit" + (openingComplete ? " border-green-600" : " border-none")}>
 			<Chessboard
 				boardWidth={boardWidth}
 				position={position}

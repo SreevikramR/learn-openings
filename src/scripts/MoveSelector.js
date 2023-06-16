@@ -1,9 +1,9 @@
 import { getMoveSequence } from "@/app/api/firebaseAccess";
 
-const MoveSelector = (moveHistory, openingLine) => {
+const MoveSelector = async (moveHistory, openingName, openingLine) => {
 
 	var moveSequence = [];
-	moveSequence = getMoveSequence(openingLine);
+	moveSequence = await getMoveSequence(openingName, openingLine);
 
 	var i = 0;
 	var j = moveHistory.length;

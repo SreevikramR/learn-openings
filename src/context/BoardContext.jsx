@@ -11,7 +11,6 @@ export const useChessboard = () => useContext(ChessboardContext)
 export const BoardProvider = ({ children }) => {
 	const [moveHistory, setMoveHistory] = useState([]);
 	const [openingName, setOpeningName] = useState("Ruy Lopez")
-	const [allOpenings, setAllOpenings] = useState([])
   	const [openingLine, setOpeningLine] = useState("");
 	const [lineVariations, setLineVariations] = useState([]);
   	const [moveResult, setMoveResult] = useState("correct");
@@ -48,8 +47,6 @@ export const BoardProvider = ({ children }) => {
 		setOpeningComplete,
 		lineVariations,
 		setLineVariations,
-		allOpenings,
-		setAllOpenings,
 		playerColor,
 		setPlayerColor,
 		mode,

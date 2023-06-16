@@ -61,7 +61,7 @@ const AnimatedBoard = () => {
         setPosition(gameCopy.fen());
 
         openingVariation = await getAlternateLine(openingVariation);
-        moveSequence = await getMoveSequence(openingVariation);
+        moveSequence = await getMoveSequence("Ruy Lopez", openingVariation);
 
         for (let i = 0; i < moveSequence.length; i++) {
             if (window.location.pathname === "/") {

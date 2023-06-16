@@ -4,30 +4,35 @@ import React, { useEffect, useState } from 'react'
 import modalStyles from "./PopUp.module.css"
 import { useChessboard } from '@/context/BoardContext'
 import { useRouter } from 'next/navigation'
-import { getOpeningsData } from '@/app/api/firebaseAccess'
+import { getAllOpeningsMetaData, stringToURL } from '@/app/api/firebaseAccess'
 
-const PopUp = () => {
+const PopUp = ({ openingClicked, popUpType }) => {
 	const router = useRouter()
-	const { openingName, popUpType, setMode } = useChessboard()
+	const { setMode } = useChessboard()
 
-	const [popUpLink, setPopUpLink] = useState("/dashboard")
+	const [popUpLink, setPopUpLink] = useState("/learn")
 	const [openingText, setOpeningText] = useState()
 
 	let fullDescription = [];
-	
-	useEffect(() => {
-		if(popUpType == "learn") {
-			setPopUpLink("/learn")
-			setMode("learn")
-		} else if(popUpType == "train") {
-			setPopUpLink("/train")
-			setMode("train")
-		}
-	}, [popUpType])
 
 	useEffect(() => {
-		setDescriptionsFunc();
-	}, [openingName])
+		openingChange();
+		if(openingClicked !== "") {
+			setDescriptionsFunc();
+		}
+	}, [popUpType, openingClicked])
+
+	async function openingChange() {
+		let openingURL = await stringToURL(openingClicked)
+		setPopUpLink(window.location.href + "/" + openingURL)
+		
+		if(popUpType == "learn") {
+			setMode("learn")
+		} else if(popUpType == "train") {
+			setMode("train")
+		}
+
+	}
 
 	const _openingText = () => {
 		return(
@@ -38,8 +43,8 @@ const PopUp = () => {
 	}
 
 	async function setDescriptionsFunc() {
-		let openingsData = await getOpeningsData()
-		let descriptions = openingsData[openingName].Description
+		let openingsData = await getAllOpeningsMetaData()
+		let descriptions = openingsData[openingClicked].Description
 		fullDescription = [];
 		for(let i = 0; i < descriptions.length; i++) {
 			let paragraph = (
@@ -56,13 +61,13 @@ const PopUp = () => {
 		<div className={modalStyles.modal} id='modal'>
 			<div className={modalStyles.modalContent}>
 				<div className={modalStyles.modalHeader}>
-					<h2 className="text-2xl font-semibold">{openingName}</h2>
+					<h2 className="text-2xl font-semibold">{openingClicked}</h2>
 					<span id='close' className={modalStyles.close}>&times;</span>
 				</div>
 				<div className={modalStyles.modalBoday}>
 					<_openingText />
 					<div className="flex justify-center">
-						<button className="bg-blue-600 mt-2 p-2 mb-4 rounded-lg" onClick={() => {router.push(popUpLink)}}>Start Now</button>
+						<button className="bg-blue-600 mt-2 p-2 mb-4 rounded-lg" onClick={() => {router.push(popUpLink)}}>Continue</button>
 					</div>
 				</div>
 			</div>

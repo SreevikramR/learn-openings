@@ -1,7 +1,6 @@
 import NavbarComponent from '@/components/navbar/Navbar'
 import Link from 'next/link'
 import AnimatedBoard from '@/components/chessboard/AnimatedBoard'
-import TrialPageInit from '@/scripts/TrialPageInit'
 
 export default function Home() {
 
@@ -42,7 +41,6 @@ export default function Home() {
 					</a>
 				</span>
 			</section>
-			<TrialPageInit />
 		</>
 	)
 }

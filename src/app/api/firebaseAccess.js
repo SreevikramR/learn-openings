@@ -5,8 +5,6 @@ import { getDataLocal, storeDataLocal } from "./localStorage";
 
 let openings = [];
 let openingData = [];
-let previousOpeningName;
-let openingLines;
 let lastChecked = 0;
 
 export async function getName() {
@@ -76,56 +74,22 @@ export async function createUser(username) {
     });
 }
 
-export async function getLines(){
-    const lines = openingLines
-    return lines;
-}
-
-export async function getNumberOfVariations(openingsList){
-    await versionControl();
-    let numberOfVariations = [];
-    for(let i=0; i<openingsList.length; i++){
-        if(getDataLocal(openingsList[i] + "Data") !== false) {
-            let openingData = getDataLocal(openingsList[i] + "Data")
-            openingLines = Object.keys(openingData).sort()
-            numberOfVariations.push(openingLines.length)
-        } else {
-            const docRef = doc(db, "openings", openingsList[i]);
-            const packet = await getDoc(docRef);
-            let openingData = packet.data()
-            storeDataLocal(openingsList[i] + "Data", openingData)
-    
-            openingLines = Object.keys(openingData).sort()
-            numberOfVariations.push(openingLines.length)
-        }
-    }
-    return numberOfVariations;
-}
-
-export async function setFirstLine(openingName){
+export async function getOpeningData(openingName) { // Returns all data about the opening - Variations, moves, etc - Alternate -> getOpeningsMetaData
     await versionControl();
     if(getDataLocal(openingName + "Data") !== false) {
         openingData = getDataLocal(openingName + "Data")
-        openingLines = Object.keys(openingData).sort()
-        previousOpeningName = openingName
     } else {
         const docRef = doc(db, "openings", openingName);
         const packet = await getDoc(docRef);
         openingData = packet.data()
         storeDataLocal(openingName + "Data", openingData)
-
-        openingLines = Object.keys(openingData).sort()
-        previousOpeningName = openingName
     }
-    return openingLines[0]
+    return openingData
 }
 
-export function getMoveSequence(openingLine){
-    const line = openingData[openingLine]
-    return line
-}
 
 export async function getAlternateLine(currentLine) {
+    let openingLines = await getLines("Ruy Lopez");
     let foundLine = false;
         while (foundLine === false) {
         let index = Math.round(randomNumber(openingLines.length - 1));
@@ -135,7 +99,7 @@ export async function getAlternateLine(currentLine) {
     }
 }
 
-export async function getAllOpenings(){
+export async function getAllOpenings(){ //CAN BE DELETED
     await versionControl();
     if(getDataLocal("allOpenings") !== false){
         openings = getDataLocal("allOpenings")
@@ -167,63 +131,109 @@ export async function getOpeningsData() {
     }
 }
 
-export async function openingLineCompleted(openingName, openingLine, color, mode) {
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    const packet = await getDoc(docRef);
-    let data = packet.data();
-    if(data[color + "_" + mode] === undefined){
-        let completedOpenings = [];
-        let openingCode = await getOpeningVariationCode(openingName, openingLine)
-        completedOpenings.push(openingCode)
-        if(mode === "learn") {
-            if(color === "white"){
-                setDoc(docRef, {white_learn: completedOpenings}, {merge: true});
-            } else {
-                setDoc(docRef, {black_learn: completedOpenings}, {merge: true});
-            }
-        } else {
-            if(color === "white"){
-                setDoc(docRef, {white_train: completedOpenings}, {merge: true});
-            } else {
-                setDoc(docRef, {black_train: completedOpenings}, {merge: true});
-            }
-        }
+
+
+
+
+
+
+
+
+
+
+//Openings Grid ->
+
+export async function getOpeningsList(){ // Returns a list of all openings
+    await versionControl();
+    let openings;
+    if(getDataLocal("allOpenings") !== false){
+        openings = await getDataLocal("allOpenings")
     } else {
-        let openingCode = await getOpeningVariationCode(openingName, openingLine)
-        if(mode === "learn") {
-            if(color === "white") {
-                let completedOpenings = data.white_learn;
-                if(completedOpenings.includes(openingCode)){
-                    return
-                }
-                completedOpenings.push(openingCode)
-                setDoc(docRef, {white_learn: completedOpenings}, {merge: true});
-            } else {
-                let completedOpenings = data.black_learn;
-                if(completedOpenings.includes(openingCode)){
-                    return
-                }
-                completedOpenings.push(openingCode)
-                setDoc(docRef, {black_learn: completedOpenings}, {merge: true});
-            }
-        } else {
-            if(color === "white") {
-                let completedOpenings = data.white_train;
-                if(completedOpenings.includes(openingCode)){
-                    return
-                }
-                completedOpenings.push(openingCode)
-                setDoc(docRef, {white_train: completedOpenings}, {merge: true});
-            } else {
-                let completedOpenings = data.black_train;
-                if(completedOpenings.includes(openingCode)){
-                    return
-                }
-                completedOpenings.push(openingCode)
-                setDoc(docRef, {black_train: completedOpenings}, {merge: true});
-            }
-        }
+        const querySnapshot = await getDocs(collection(db, "openings"));
+        openings = [];
+        querySnapshot.forEach((doc) => {
+            openings.push(doc.id)
+        });
+        storeDataLocal("allOpenings", openings)
     }
+    return openings
+}
+
+export async function getAllOpeningsMetaData() {
+    await versionControl();
+    if(getDataLocal("openingsData") !== false){
+        let openingsData;
+        openingsData = getDataLocal("openingsData")
+        return openingsData
+    } else {
+        const querySnapshot = await getDocs(collection(db, "openingsData"));
+        let openingsData = {};
+        querySnapshot.forEach((doc) => {
+            openingsData[doc.id] = doc.data()
+        })
+        storeDataLocal("openingsData", openingsData)
+        return openingsData
+    }
+}
+
+export async function getAllVariationsAndMovesForOpening(openingName) { // Returns all data about the opening - Variations, moves, etc
+    await versionControl();
+    if(getDataLocal(openingName + "Data") !== false) {
+        openingData = getDataLocal(openingName + "Data")
+    } else {
+        console.log(openingName)
+        const docRef = doc(db, "openings", openingName);
+        const packet = await getDoc(docRef);
+        openingData = packet.data()
+        storeDataLocal(openingName + "Data", openingData)
+    }
+    return openingData
+}
+
+export async function getNumberOfVariations(openingsList){
+    await versionControl();
+    let numberOfVariations = [];
+    for(let i=0; i<openingsList.length; i++){
+        let variations = await getLines(openingsList[i])
+        numberOfVariations.push(variations.length)
+    }
+    return numberOfVariations;
+}
+
+export async function getVariationNames(openingName){
+    await versionControl();
+    const openingData = await getAllVariationsAndMovesForOpening(openingName);
+    let openingLines = Object.keys(openingData).sort()
+    return openingLines
+}
+
+export async function parseFromURL(unparsedString) {
+    let tempString = unparsedString.split("%2C").join(",");
+    let words = tempString.split("-");
+    let parsedString = words.map((word) => { return word[0].toUpperCase() + word.substring(1)}).join(" ");
+    words = parsedString.split("_");
+    parsedString = words.map((word) => { return word[0].toUpperCase() + word.substring(1)}).join("-");
+
+    return parsedString;
+}
+
+export async function stringToURL(string) {
+    var str = string;
+    str = str.replace('-', '_')
+    str = str.replace(/\s+/g, '-').toLowerCase();
+    str = str.replace(',', '%2C')
+    return str;
+}
+
+export async function getMoveSequence(openingName, openingLine){
+    const openingData = await getAllVariationsAndMovesForOpening(openingName)
+    const line = openingData[openingLine]
+    return line
+}
+
+export async function getImageURL(imgName) {
+    const url = await getDownloadURL(ref(storage, imgName));
+    return url;
 }
 
 export async function getCompletedOpenings(color, mode) {
@@ -294,16 +304,8 @@ async function getAllVariationCodes(openingName) {
 }
 
 async function getOpeningVariationCode(openingName, openingLine) {
-    if(getDataLocal(openingName + "Codes") !== false) {
-        let openingCodes = getDataLocal(openingName + "Codes")
-        return openingCodes["openingCode"] + "-" + openingCodes[openingLine + " Code"]
-    } else {
-        const docRef = doc(db, "openingsData", openingName);
-        const packet = await getDoc(docRef);
-        let openingCodes = packet.data();
-        storeDataLocal(openingName + "Codes", openingCodes)
-        return openingCodes["openingCode"] + "-" + openingCodes[openingLine + " Code"]
-    }
+    const openingCodes = await getAllVariationCodes(openingName)
+    return openingCodes["openingCode"] + "-" + openingCodes[openingLine + " Code"]
 }
 
 function randomNumber(max) {
@@ -326,7 +328,75 @@ async function versionControl() {
     }
 }
 
-export async function getImageURL(imgName) {
-    const url = await getDownloadURL(ref(storage, imgName));
-    return url;
+export async function openingLineCompleted(openingName, openingLine, color, mode) {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const packet = await getDoc(docRef);
+    let data = packet.data();
+    if(data[color + "_" + mode] === undefined){
+        let completedOpenings = [];
+        let openingCode = await getOpeningVariationCode(openingName, openingLine)
+        completedOpenings.push(openingCode)
+        if(mode === "learn") {
+            if(color === "white"){
+                setDoc(docRef, {white_learn: completedOpenings}, {merge: true});
+            } else {
+                setDoc(docRef, {black_learn: completedOpenings}, {merge: true});
+            }
+        } else {
+            if(color === "white"){
+                setDoc(docRef, {white_train: completedOpenings}, {merge: true});
+            } else {
+                setDoc(docRef, {black_train: completedOpenings}, {merge: true});
+            }
+        }
+    } else {
+        let openingCode = await getOpeningVariationCode(openingName, openingLine)
+        if(mode === "learn") {
+            if(color === "white") {
+                let completedOpenings = data.white_learn;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {white_learn: completedOpenings}, {merge: true});
+            } else {
+                let completedOpenings = data.black_learn;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {black_learn: completedOpenings}, {merge: true});
+            }
+        } else {
+            if(color === "white") {
+                let completedOpenings = data.white_train;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {white_train: completedOpenings}, {merge: true});
+            } else {
+                let completedOpenings = data.black_train;
+                if(completedOpenings.includes(openingCode)){
+                    return
+                }
+                completedOpenings.push(openingCode)
+                setDoc(docRef, {black_train: completedOpenings}, {merge: true});
+            }
+        }
+    }
+}
+
+export async function setFirstLine(openingName){
+    await versionControl();
+    let openingLines = await getLines(openingName);
+    return openingLines[0]
+}
+
+export async function getLines(openingName){
+    await versionControl();
+    const openingData = await getOpeningData(openingName)
+    let openingLines;
+    openingLines = Object.keys(openingData).sort()
+    return openingLines
 }
