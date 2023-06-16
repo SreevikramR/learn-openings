@@ -74,20 +74,6 @@ export async function createUser(username) {
     });
 }
 
-export async function getOpeningData(openingName) { // Returns all data about the opening - Variations, moves, etc - Alternate -> getOpeningsMetaData
-    await versionControl();
-    if(getDataLocal(openingName + "Data") !== false) {
-        openingData = getDataLocal(openingName + "Data")
-    } else {
-        const docRef = doc(db, "openings", openingName);
-        const packet = await getDoc(docRef);
-        openingData = packet.data()
-        storeDataLocal(openingName + "Data", openingData)
-    }
-    return openingData
-}
-
-
 export async function getAlternateLine(currentLine) {
     let openingLines = await getLines("Ruy Lopez");
     let foundLine = false;
@@ -98,50 +84,6 @@ export async function getAlternateLine(currentLine) {
         }
     }
 }
-
-export async function getAllOpenings(){ //CAN BE DELETED
-    await versionControl();
-    if(getDataLocal("allOpenings") !== false){
-        openings = getDataLocal("allOpenings")
-    } else {
-        const querySnapshot = await getDocs(collection(db, "openings"));
-        openings = []
-        querySnapshot.forEach((doc) => {
-            openings.push(doc.id)
-        });
-        storeDataLocal("allOpenings", openings)
-    }
-    return openings
-}
-
-export async function getOpeningsData() {
-    await versionControl();
-    if(getDataLocal("openingsData") !== false){
-        let openingsData;
-        openingsData = getDataLocal("openingsData")
-        return openingsData
-    } else {
-        const querySnapshot = await getDocs(collection(db, "openingsData"));
-        let openingsData = {};
-        querySnapshot.forEach((doc) => {
-            openingsData[doc.id] = doc.data()
-        })
-        storeDataLocal("openingsData", openingsData)
-        return openingsData
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-//Openings Grid ->
 
 export async function getOpeningsList(){ // Returns a list of all openings
     await versionControl();
