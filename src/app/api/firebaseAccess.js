@@ -74,6 +74,20 @@ export async function createUser(username) {
     });
 }
 
+export async function getOpeningData(openingName) { // Returns all data about the opening - Variations, moves, etc - Alternate -> getOpeningsMetaData
+    await versionControl();
+    if(getDataLocal(openingName + "Data") !== false) {
+        openingData = getDataLocal(openingName + "Data")
+    } else {
+        const docRef = doc(db, "openings", openingName);
+        const packet = await getDoc(docRef);
+        openingData = packet.data()
+        storeDataLocal(openingName + "Data", openingData)
+    }
+    return openingData
+}
+
+
 export async function getAlternateLine(currentLine) {
     let openingLines = await getLines("Ruy Lopez");
     let foundLine = false;
