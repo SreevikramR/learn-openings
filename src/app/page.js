@@ -1,41 +1,95 @@
 import NavbarComponent from '@/components/navbar/Navbar'
 import Link from 'next/link'
 import AnimatedBoard from '@/components/chessboard/AnimatedBoard'
+import Image from 'next/image'
+import queenLogo from '../../public/queen_logo.png'
+import styles from './styles/home.module.css'
+import StatTile from '@/components/home/StatTile'
+import kingKnightIcon from '../../public/kingKnight.png'
 
 export default function Home() {
 
+	// const hiddenElements = document.querySelectorAll('.hidden');
+
 	return (
 		<>
-			<NavbarComponent />
-			<section className="flex flex-col w-full lg:flex-row lg:flex lg:columns-2 lg:justify-center lg:align-middle lg:items-center lg:w-full">
-				<div className="w-full justify-center flex relative lg:w-1/2 lg:col-span-1 lg:relative lg:justify-center lg:flex lg:mt-5">
-					<span>
-						<AnimatedBoard />
+			<section className={styles.heroSection}>
+				<div className='flex flex-col'>
+					<div className='flex justify-center mt-40'>
+						<div className={styles.logo}>
+							<Image src={queenLogo} width={50} height={50} alt='chess queen'/>
+						</div>
+					</div>
+					<div className="w-3/4 lg:w-1/2 flex self-center text-center text-5xl lg:text-7xl font-bold text-blue-600 mt-12">
+						<div className={styles.headingText}>
+							Master the Art of Chess Openings
+						</div>
+					</div>
+					<div className='w-full flex justify-center items-center text-center mt-12'>
+						<div className={styles.button1}>
+							<Link href="/register">
+								<button className='bg-white hover:border-blue-600 text-zinc-900 font-semibold px-5 py-2 border-2 rounded-full mr-2'>Learn Now</button>
+							</Link>
+						</div>
+						<div className={styles.button2}>
+							<Link href="/try_now">
+								<button className=' bg-yellow-400 hover:border-white text-zinc-900 font-semibold px-5 py-2 border-2 border-yellow-400 rounded-full ml-2'>Try for Free</button>
+							</Link>
+						</div>
+					</div>
+					<div className='text-center pt-6 text-gray-400'>
+						<div className={styles.loginButton}>
+							<Link href="/login" className='hover:text-white'>
+								Login
+							</Link>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section className="bg-blue-600 pt-16 lg:pt-24 flex flex-col">
+				<div className="px-4 lg:px-0 lg:w-4/5 text-neutral-900 self-center">
+					<span className='text-3xl lg:text-6xl font-semibold'>
+						Unleash the <span className={styles.highlightedText}>Grandmaster</span> Within <span className={styles.highlightedText}>You!</span>
 					</span>
-				</div>
-				<div className="text-white w-full text-4xl font-bold text-center mt-3 lg:text-white lg:col-span-1 lg:w-1/2 lg:text-center lg:text-7xl lg:font-bold lg:flex-row">
-					<span className="text-blue-600">Crush</span> your <br/> opponents with <br/> <span className="text-blue-600">flawless</span> openings
-					<br/><div className="mt-6 mb-10 xl:mb-0"><Link href="/try_now"><span className="text-3xl font-bold text-white lg:border-4 lg:border-blue-600 bg-blue-600 hover:border-white lg:px-4 px-2 py-2 lg:m-4 lg:py-3 rounded-xl lg:rounded-2xl hover:cursor-pointer" data-umami-event="Try Now Button"> Try Now! </span></Link></div>
-				</div>
-			</section>
-			<div className="aspect-90/15 w-full bg-no-repeat bg-center bg-cover bg-transition1"></div>
-			<section className="bg-blue-800 flex -mt-1">
-				<div className='w-full text-center text-2xl lg:text-4xl xl:text-5xl italic font-semibold lg:ml-10 ml-5 mt-5 mb-5 lg:mt-10 mr-5 lg:mb-16'>
-					<span className=''>Don’t Just Watch Chess Openings. Start playing them on the board</span>
+					<p className='text-base lg:text-xl text-white lg:w-3/5 pb-20 mt-10'>
+					Whether you're a beginner or a seasoned player, our interactive chessboard and diverse range of openings have got you covered. Join a community of chess enthusiasts and elevate your game to the next level. Learn, practice, and unleash the grandmaster within you.
+					</p>
 				</div>
 			</section>
-			<div className="aspect-90/15 w-full bg-no-repeat bg-center bg-cover bg-transition2 -mt-1"></div>
-			<section className="bg-black flex flex-col">
-				<div className='w-full lg:w-11/12 text-center text-2xl lg:text-5xl italic font-semibold mb-8 lg:mb-16 lg:justify-end lg:flex'>
-					<span className='font-semibold'>What is a Chess Opening?</span>
+			<section className='flex flex-col lg:flex-row pt-20 pb-20'>
+				<div className='lg:w-1/2 px-4 lg:pl-12 lg:pr-0 flex flex-col justify-center'>
+					<span className='font-semibold text-3xl lg:text-5xl pb-4 lg:pb-12'>Interactive Learning Experience</span>
+					<span className='text-base pb-8 lg:text-xl lg:pb-0'>Learn chess openings step-by-step using our interactive board that will guide you through each move, ensuring a comprehensive understanding. Equip yourself with unbeatable strategies and conquer the 64 squares with newfound expertise</span>
 				</div>
-				<div className='lg:w-4/6 text-center text-lg lg:text-3xl font-semibold lg:ml-10 ml-5 lg:mt-10 mr-3 mb-10 lg:mb-24'>
-					<span className=''>A chess opening is the first few moves of a chess game. It is important to study openings because they can give you a significant advantage over your opponent. <br/> <br/>
-						There are many different chess openings, and each one has its own strengths and weaknesses<br/> <br/>
-						With a little practice, you can learn to play chess openings like a pro</span>
+
+				<div className='lg:w-1/2 justify-center flex'>
+					<AnimatedBoard />
 				</div>
-				<br/><div className="mb-10 flex self-center"><Link href="/try_now"><span className="text-xl lg:text-3xl font-bold text-white lg:border-4 lg:border-blue-600 bg-blue-600 hover:border-white lg:px-4 px-2 py-2 lg:m-4 lg:py-3 rounded-xl lg:rounded-2xl hover:cursor-pointer" data-umami-event="Bottom Try Now Button"> Start Learning Now! </span></Link></div>
-				<span className='flex justify-center center pb-4 pt-3 w-full border-t-2 border-zinc-800'>
+			</section>
+			<section className='flex flex-col lg:flex-row lg:pt-20 pb-20 justify-center flex-wrap items-center'>
+				<StatTile text="Opening Variations" value={50} index={0}/>
+				<StatTile text="Openings" value={5} index={1}/>
+			</section>
+			<section className='flex flex-col pt-10 pb-20 items-center'>
+				<div>
+					<Image src={kingKnightIcon} width={250} height={250} alt='chess King, Knight'/>
+				</div>
+				<div className='w-4/5 lg:w-3/5 text-3xl lg:text-5xl text-center'>
+					Ready to unlock your full chess potential? Jump in!
+				</div>
+				<div className='flex flex-row mt-8'>
+					<div>
+						<button className='bg-white hover:border-blue-600 text-zinc-900 font-semibold px-5 py-2 border-2 rounded-full mr-2'>Learn Now</button>
+					</div>
+					<div>
+						<Link href="/try_now">
+							<button className=' bg-yellow-400 hover:border-white text-zinc-900 font-semibold px-5 py-2 border-2 border-yellow-400 rounded-full ml-2'>Try for Free</button>
+						</Link>
+					</div>
+				</div>
+			</section>
+			<section>
+				<span className='flex justify-center pb-4 pt-10'>
 					<a className='p-2 border-white border-2 rounded-lg' href="mailto:sreevikram.r@gmail.com">
 						Contact: sreevikram.r@gmail.com
 					</a>

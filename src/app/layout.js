@@ -8,6 +8,9 @@ import { Oxanium } from 'next/font/google'
 export const metadata = {
 	title: 'Openings 101',
 	description: 'Learn Chess openings and practice them with our interactive trainer.',
+	viewport: 'width=device-width, initial-scale=1.0',
+	keywords: 'chess, openings, grandmaster, learn, ruy lopez, london system, sicilian defense, french defense, caro kann, italian game, scotch game, queen\'s gambit, king\'s gambit, king\'s indian defense, grunfeld defense, dutch defense, english opening, catalan opening, pirc defense, alekhine defense, benoni defense, nimzo indian defense, queen\'s indian defense, bogo indian defense, slav defense, tarrasch defense, grunfeld defense, chess openings, chess opening, chess opening trainer, chess opening training, chess opening practice, chess opening practice, chess opening trainer, chess open',
+
 }
 
 const oxanium = Oxanium({

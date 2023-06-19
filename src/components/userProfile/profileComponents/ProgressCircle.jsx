@@ -1,6 +1,7 @@
 "use client"
 import React from 'react'
 import styles from './ProgressCircle.module.css'
+import CountUp from 'react-countup'
 
 const ProgressCircle = ({ percent, label, label2, label3 }) => {
 
@@ -13,7 +14,7 @@ const ProgressCircle = ({ percent, label, label2, label3 }) => {
                         <circle cx="70" cy="70" r="70" className={styles.circle}/>
                     </svg>
                     <div className={styles.number}>
-                        <span><span className='text-4xl'>{label}</span><span>{label2}</span></span>
+                        <span><span className='text-4xl'><CountUp end={Number(label)} duration={3} /></span><span>{label2}</span></span>
                         <span className='pt-1'>{label3}</span>
                     </div>
                 </div>

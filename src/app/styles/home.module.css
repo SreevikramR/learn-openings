@@ -1,0 +1,97 @@
+.headingText {
+    animation: textFadeIn 3s ease-in-out;
+    line-height: 1.25;
+}
+
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.logo {
+    animation: logoFadeIn 2s ease-in-out;
+}
+
+@keyframes logoFadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.button1 {
+    animation: button1FadeIn 4s ease-in-out;
+}
+
+@keyframes button1FadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    66% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.button2 {
+    animation: button2FadeIn 5s ease-in-out;
+}
+
+@keyframes button2FadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.loginButton {
+    animation: loginButtonFade 6s ease-in-out;
+}
+
+@keyframes loginButtonFade {
+    0% {
+        opacity: 0;
+    }
+
+    90% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.heroSection {
+    height: 100vh;
+}
+
+.highlightedText {
+    color: yellow;
+}
