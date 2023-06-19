@@ -1,4 +1,3 @@
-import NavbarComponent from '@/components/navbar/Navbar'
 import Link from 'next/link'
 import AnimatedBoard from '@/components/chessboard/AnimatedBoard'
 import Image from 'next/image'
@@ -8,8 +7,6 @@ import StatTile from '@/components/home/StatTile'
 import kingKnightIcon from '../../public/kingKnight.png'
 
 export default function Home() {
-
-	// const hiddenElements = document.querySelectorAll('.hidden');
 
 	return (
 		<>
@@ -52,7 +49,7 @@ export default function Home() {
 						Unleash the <span className={styles.highlightedText}>Grandmaster</span> Within <span className={styles.highlightedText}>You!</span>
 					</span>
 					<p className='text-base lg:text-xl text-white lg:w-3/5 pb-20 mt-10'>
-					Whether you're a beginner or a seasoned player, our interactive chessboard and diverse range of openings have got you covered. Join a community of chess enthusiasts and elevate your game to the next level. Learn, practice, and unleash the grandmaster within you.
+					Whether you&apos;re a beginner or a seasoned player, our interactive chessboard and diverse range of openings have got you covered. Join a community of chess enthusiasts and elevate your game to the next level. Learn, practice, and unleash the grandmaster within you.
 					</p>
 				</div>
 			</section>
