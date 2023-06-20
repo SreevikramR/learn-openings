@@ -25,7 +25,7 @@ export async function getName() {
 export async function signUserOut() {
     localStorage.removeItem("username");
     localStorage.removeItem("name");
-    auth.signOut();
+    await auth.signOut();
 }
 
 export async function checkUsernameExists(username) {

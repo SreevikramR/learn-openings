@@ -5,13 +5,18 @@ import modalStyles from "./PopUp.module.css"
 import { useChessboard } from '@/context/BoardContext'
 import { useRouter } from 'next/navigation'
 import { getAllOpeningsMetaData, stringToURL } from '@/app/api/firebaseAccess'
+import { useSearchParams } from 'next/navigation'
 
 const PopUp = ({ openingClicked, popUpType }) => {
 	const router = useRouter()
 	const { setMode } = useChessboard()
 
+	const searchParams = useSearchParams()
+	const param = searchParams.get('demo')
+
 	const [popUpLink, setPopUpLink] = useState("/learn")
 	const [openingText, setOpeningText] = useState()
+	const [searchParamURL, setSearchParamURL] = useState("")
 
 	let fullDescription = [];
 
@@ -20,11 +25,23 @@ const PopUp = ({ openingClicked, popUpType }) => {
 		if(openingClicked !== "") {
 			setDescriptionsFunc();
 		}
+		if(param === "true") {
+			setSearchParamURL("?demo=true")
+		} else {
+			setSearchParamURL("")
+		}
 	}, [popUpType, openingClicked])
+
+	function removeSearchParams() {
+		let url = window.location.href
+		let newURL = url.split("?")[0]
+		return newURL
+	}
 
 	async function openingChange() {
 		let openingURL = await stringToURL(openingClicked)
-		setPopUpLink(window.location.href + "/" + openingURL)
+		let newURL = removeSearchParams()
+		setPopUpLink(newURL + "/" + openingURL + searchParamURL)
 		
 		if(popUpType == "learn") {
 			setMode("learn")

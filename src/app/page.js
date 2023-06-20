@@ -14,7 +14,7 @@ export default function Home() {
 				<div className='flex flex-col'>
 					<div className='flex justify-center mt-40'>
 						<div className={styles.logo}>
-							<Image src={queenLogo} width={50} height={50} alt='chess queen'/>
+							<Image src={queenLogo} width={50} height={50} alt='chess queen' priority/>
 						</div>
 					</div>
 					<div className="w-3/4 lg:w-1/2 flex self-center text-center text-5xl lg:text-7xl font-bold text-blue-600 mt-12">
@@ -29,7 +29,7 @@ export default function Home() {
 							</Link>
 						</div>
 						<div className={styles.button2}>
-							<Link href="/try_now">
+							<Link href="/learn?demo=true">
 								<button className=' bg-yellow-400 hover:border-white text-zinc-900 font-semibold px-5 py-2 border-2 border-yellow-400 rounded-full ml-2'>Try for Free</button>
 							</Link>
 						</div>
@@ -69,17 +69,19 @@ export default function Home() {
 			</section>
 			<section className='flex flex-col pt-10 pb-20 items-center'>
 				<div>
-					<Image src={kingKnightIcon} width={250} height={250} alt='chess King, Knight'/>
+					<Image src={kingKnightIcon} width={250} height={250} alt='chess King, Knight' priority/>
 				</div>
 				<div className='w-4/5 lg:w-3/5 text-3xl lg:text-5xl text-center'>
 					Ready to unlock your full chess potential? Jump in!
 				</div>
 				<div className='flex flex-row mt-8'>
 					<div>
-						<button className='bg-white hover:border-blue-600 text-zinc-900 font-semibold px-5 py-2 border-2 rounded-full mr-2'>Learn Now</button>
+						<Link href="register">
+							<button className='bg-white hover:border-blue-600 text-zinc-900 font-semibold px-5 py-2 border-2 rounded-full mr-2'>Learn Now</button>
+						</Link>
 					</div>
 					<div>
-						<Link href="/try_now">
+						<Link href="/learn?demo=true">
 							<button className=' bg-yellow-400 hover:border-white text-zinc-900 font-semibold px-5 py-2 border-2 border-yellow-400 rounded-full ml-2'>Try for Free</button>
 						</Link>
 					</div>

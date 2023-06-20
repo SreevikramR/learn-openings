@@ -18,7 +18,7 @@ const StatTile = ({ text, value, index }) => {
     return (
         <>
             <div className={styles.statTile}>
-                <Image src={icon} alt="Tactics Icon" width={125} height={125}/>
+                <Image src={icon} alt="Tactics Icon" width={125} height={125} priority/>
                 <CountUp end={value} duration={3} delay={2} enableScrollSpy suffix='+' />
                 <div className='text-xl'>{text}</div>
             </div>

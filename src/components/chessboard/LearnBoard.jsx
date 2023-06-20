@@ -6,6 +6,7 @@ import { Chess } from "chess.js";
 import MoveSelector from "../../scripts/MoveSelector";
 import { openingLineCompleted } from "@/app/api/firebaseAccess";
 import LoadingOverlay from "../overlay/LoadingOverlay";
+import { useSearchParams } from 'next/navigation';
 
 let nextMove;
 let tempMoveHistory = []
@@ -17,6 +18,9 @@ const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
 	const { setMoveHistory, setMoveResult, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, isBoardLoaded, setIsBoardLoaded} = useChessboard()
 
 	const [boardWidth, setBoardWidth] = useState(500);
+
+	const searchParams = useSearchParams()
+	const params = searchParams.get('demo')
 
 	useEffect(() => {
 		const gameCopy = new Chess();
@@ -114,7 +118,6 @@ const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
 		setGame(gameCopy);
 		setPosition(game.fen());
 
-		//moveHistory = gameCopy.history();
 		setMoveHistory(gameCopy.history());
 		tempMoveHistory = gameCopy.history();
 		nextMove = await MoveSelector(tempMoveHistory, openingName, openingLine);
@@ -130,14 +133,22 @@ const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
 		} else if (nextMove == null) {
 			setMoveResult("correct");
 			setOpeningComplete(true)
-			// umami.track('Learn - variation complete')
+			if(params === 'true') {
+				umami.track('Demo - variation complete - ' + openingName + ' - ' + openingLine)
+			} else {
+				umami.track('Learn - variation complete')
+			}
 			openingLineCompleted(openingName, openingLine, playerColor, "learn")
 		} else {
 			setTimeout(() => {
 				setMoveResult("correct");
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
-					// umami.track('Learn - variation complete')
+					if(params === 'true') {
+						umami.track('Demo - variation complete - ' + openingName + ' - ' + openingLine)
+					} else {
+						umami.track('Learn - variation complete')
+					}
 					openingLineCompleted(openingName, openingLine, playerColor, "learn")
 				}
 				playMove(nextMove);

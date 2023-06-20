@@ -134,7 +134,7 @@ const TrainBoard = ({ moveSequence, openingName, openingLine }) => {
 			setMoveResult("correct");
 			setOpeningComplete(true)
 			openingLineCompleted(openingName, openingLine, playerColor, "train")
-			// umami.track('Train - variation complete')
+			umami.track('Train - variation complete')
 		} else {
 			setTimeout(() => {
 				setMoveResult("correct");
@@ -142,7 +142,7 @@ const TrainBoard = ({ moveSequence, openingName, openingLine }) => {
 				if (tempMoveHistory.length === moveSequence.length - 1) {
 					setOpeningComplete(true)
 					openingLineCompleted(openingName, openingLine, playerColor, "train")
-					// umami.track('Train - variation complete')
+					umami.track('Train - variation complete')
 				}
 
 				playMove(nextMove);

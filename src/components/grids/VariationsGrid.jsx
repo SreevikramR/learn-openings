@@ -1,11 +1,12 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { useChessboard } from "@/context/BoardContext";
-import { getLines, getVariationNames, parseFromURL, stringToURL, getImageURL } from "@/app/api/firebaseAccess";
+import { getVariationNames, parseFromURL, stringToURL, getImageURL } from "@/app/api/firebaseAccess";
 import LoadingOverlay from "../overlay/LoadingOverlay";
 import styles from "./Grid.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 const VariationsGrid = ({ opening }) => {
     const {setPopUpType, setOpeningLine} = useChessboard()
@@ -13,13 +14,23 @@ const VariationsGrid = ({ opening }) => {
     const [loadingTiles, setLoadingTiles] = useState(true)
 	const [openingName, setOpeningName] = useState("")
 
+	const searchParams = useSearchParams()
+	const param = searchParams.get('demo')
+
 	let variationURLs;
 
     useEffect(() => {
+		console.log(param)
+		let searchParam
+		if(param === "true") {
+			searchParam = "?demo=true"
+		} else {
+			searchParam = ""
+		}
 		parseFromURL(opening).then((openingName) => {
 			setOpeningName(openingName)
 			getVariationNames(openingName).then((lines) => {
-				setTileData(lines)
+				setTileData(lines, searchParam)
 			})
 		})
 
@@ -30,7 +41,13 @@ const VariationsGrid = ({ opening }) => {
         }
     }, [])
 
-    async function setTileData(variationList) {
+	function removeSearchParams() {
+		let url = window.location.href
+		let newURL = url.split("?")[0]
+		return newURL
+	}
+
+    async function setTileData(variationList, searchParam) {
 		let imgURLs = []
 		let tempTiles = []
 		let boxWidth = 360;
@@ -51,7 +68,8 @@ const VariationsGrid = ({ opening }) => {
 
 				let variationURL = await stringToURL(variation)
 				let URLString = variationURL
-				variationURL = window.location.href + "/" + variationURL
+				variationURL = removeSearchParams() + "/" + variationURL + searchParam
+				console.log(variationURL)
 				
 				let imgURL = await getImageURL(opening + "/" + URLString + ".png")
 				imgURLs.push(imgURL)

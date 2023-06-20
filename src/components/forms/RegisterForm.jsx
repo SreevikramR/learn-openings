@@ -14,7 +14,9 @@ const RegisterForm = () => {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if(user) {
-                router.push("/dashboard")
+                if(window.location.pathname === "/register") {
+                    router.push("/dashboard")
+                }
             } else {
                 localStorage.removeItem("username");
                 localStorage.removeItem("name");
@@ -26,7 +28,6 @@ const RegisterForm = () => {
     function googleSignInPopup() {
         signInWithPopup(auth, googleProvider)
         .then(() => {
-            console.log("Logged In")
             router.push("/onboarding")
         }).catch((error) => {
             errorHandler(error.code);
@@ -37,7 +38,6 @@ const RegisterForm = () => {
     function gitHubSignInPopup() {
         signInWithPopup(auth, githubProvider)
         .then((result) => {
-            console.log("logged In")
             router.push("/onboarding")
         }).catch((error) => {
             errorHandler(error.code);          
