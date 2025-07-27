@@ -7,6 +7,8 @@ import MoveSelector from "../../scripts/MoveSelector";
 import { openingLineCompleted } from "@/app/api/firebaseAccess";
 import LoadingOverlay from "../overlay/LoadingOverlay";
 import { useSearchParams } from 'next/navigation';
+import ExplanationBox from "../explanation/ExplanationBox";  // ✅ NEW IMPORT
+import MoveTable from "../moveTable/MoveTable";            // ✅ NEW IMPORT
 
 let nextMove;
 let tempMoveHistory = []
@@ -16,9 +18,7 @@ let firstRun = true;
 
 const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
 	const { setMoveHistory, setMoveResult, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, isBoardLoaded, setIsBoardLoaded} = useChessboard()
-
 	const [boardWidth, setBoardWidth] = useState(500);
-
 	const searchParams = useSearchParams()
 	const params = searchParams.get('demo')
 
@@ -38,15 +38,7 @@ const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
 		} else {
 			getExpectedMove()
 		}
-		window.addEventListener('resize', ()=> {
-            if(window.innerWidth < 450) {
-				setBoardWidth(window.innerWidth / 1.5);
-			} else if(window.innerWidth < 850) {
-				setBoardWidth(window.innerWidth / 2.25);
-			} else {
-				setBoardWidth(window.innerWidth / 3);
-			}
-        })
+		window.addEventListener('resize', initBoardWidth)
 		firstRun = false;
 	}, []);
 
@@ -177,46 +169,42 @@ const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
 	const isDraggable = (piece, sourceSquare) => {
 		if(!openingComplete) {
 			if (playerColor == 'white') {
-				if (
-					piece.piece === "wP" ||
-					piece.piece === "wR" ||
-					piece.piece === "wB" ||
-					piece.piece === "wN" ||
-					piece.piece === "wK" ||
-					piece.piece === "wQ"
-				) {
-					return true;
-				} else return false;
+				return piece.piece.startsWith("w");
 			} else if (playerColor == 'black'){
-				if (
-					piece.piece === "bP" ||
-					piece.piece === "bR" ||
-					piece.piece === "bB" ||
-					piece.piece === "bN" ||
-					piece.piece === "bK" ||
-					piece.piece === "bQ"
-				) {
-					return true;
-				} else return false;
+				return piece.piece.startsWith("b");
 			}
-		} else return false;
+		}
+		return false;
 	};
 
 	return (
-		<div className={"border-8 w-fit" + (openingComplete ? " border-green-600" : " border-none")}>
-			<Chessboard
-				boardWidth={boardWidth}
-				position={position}
-				onPieceDrop={onDrop}
-				isDraggablePiece={isDraggable}
-				animationDuration={750}
-				customArrows={arrowArray}
-				customArrowColor="rgb(87, 109, 232, 0.9)"
-				boardOrientation={playerColor}
-			/>
-			<div className={"justify-center" + (!isBoardLoaded ? " flex" : " hidden")}>
-                <LoadingOverlay/>
-            </div>
+		<div className="flex flex-col md:flex-row gap-4">
+      
+			<div className={"border-8 w-fit " + (openingComplete ? "border-green-600" : "border-none")}>
+        <h1 className="text-white text-4xl font-bold text-center">{openingName}</h1>
+        <h2 className="text-white text-xl font-bold mb-2 text-center">
+      {openingLine}
+    </h2>
+				<Chessboard
+					boardWidth={boardWidth}
+					position={position}
+					onPieceDrop={onDrop}
+					isDraggablePiece={isDraggable}
+					animationDuration={750}
+					customArrows={arrowArray}
+					customArrowColor="rgb(87, 109, 232, 0.9)"
+					boardOrientation={playerColor}
+				/>
+				<div className={"justify-center" + (!isBoardLoaded ? " flex" : " hidden")}>
+					<LoadingOverlay />
+				</div>
+			</div>
+
+			{/* RIGHT PANEL */}
+			<div className="flex flex-col justify-start gap-4 w-full md:w-[300px]">
+      <ExplanationBox currentFEN={game.fen()} />  {/* This shows correct explanation */}
+      <MoveTable moveSequence={moveSequence} openingLine={openingLine} />
+    </div>
 		</div>
 	);
 }

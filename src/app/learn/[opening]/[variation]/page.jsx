@@ -54,12 +54,7 @@ const LearnPage = ({ params }) => {
                                     <LearnBoard moveSequence={moveSequence} openingName={opening} openingLine={variation}/>
                                 </span>
                             </div>
-                            <div className="text-white col-span-1 lg:w-1/2 w-full text-center text-7xl font-bold flex-col flex">
-                                <div className="lg:text-5xl text-2xl pb-3 pt-3 lg:mr-16">
-                                    {opening}
-                                </div>
-                                <MoveTable moveSequence={moveSequence} openingLine={variation}/>
-                            </div>
+                            
                         </div>
                         {isDemoUser &&
                             <RegisterPopUp />
