@@ -11,17 +11,15 @@ import ExplanationBox from "../explanation/ExplanationBox";
 import MoveTable from "../moveTable/MoveTable";
 import { getExplanationFromGemini } from "../explanation/geminiHelper";
 
-// --- Removed global variables to prevent bugs with React re-renders ---
-
 const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
     const { setMoveHistory, setMoveResult, game, setGame, position, setPosition, setOpeningComplete, openingComplete, playerColor, isBoardLoaded, setIsBoardLoaded } = useChessboard();
     const [boardWidth, setBoardWidth] = useState(500);
     const [explanation, setExplanation] = useState("Make your first move to begin.");
     const [arrows, setArrows] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0); // single source of truth
 
-    // Use useRef to store values that don't need to trigger re-renders
-    const moveQueue = useRef({ expectedMove: null, history: [] });
-    const isProcessing = useRef(false); // Prevents multiple moves from being processed at once
+    const moveQueue = useRef({ expectedMove: null });
+    const isProcessing = useRef(false);
 
     const searchParams = useSearchParams();
     const params = searchParams.get('demo');
@@ -31,6 +29,7 @@ const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
         setGame(gameCopy);
         setPosition(gameCopy.fen());
         setOpeningComplete(false);
+        setCurrentIndex(0);
 
         const handleResize = () => {
             if (window.innerWidth < 450) setBoardWidth(window.innerWidth / 1.5);
@@ -42,114 +41,113 @@ const LearnBoard = ({ moveSequence, openingName, openingLine }) => {
         setIsBoardLoaded(true);
         window.addEventListener('resize', handleResize);
 
-        // Initial setup based on player color
-        if (playerColor === 'black') {
-            setTimeout(playFirstOpponentMove, 1000);
+        if (playerColor === "black") {
+            // Auto-play White’s first move
+            setTimeout(() => {
+                const gameCopyBlack = new Chess();
+                gameCopyBlack.move(moveSequence[0]);
+                setGame(gameCopyBlack);
+                setPosition(gameCopyBlack.fen());
+                setMoveHistory(gameCopyBlack.history());
+                getAndShowExpectedMove(gameCopyBlack.history());
+                setCurrentIndex(1);
+            }, 500);
         } else {
-            getAndShowExpectedMove();
+            // White plays first → show arrow
+            getAndShowExpectedMove(gameCopy.history());
         }
 
         return () => window.removeEventListener('resize', handleResize);
-    }, [playerColor, openingName, openingLine]); // Re-run effect if the opening changes
+    }, [playerColor, openingName, openingLine]);
 
-
-    const getAndShowExpectedMove = async () => {
-        const currentHistory = game.history();
+    const getAndShowExpectedMove = async (currentHistory) => {
         const expectedMove = await MoveSelector(currentHistory, openingName, openingLine);
         moveQueue.current.expectedMove = expectedMove;
 
         if (expectedMove && expectedMove !== "invalid") {
-            const gameCopy = new Chess(game.fen());
-            gameCopy.move(expectedMove);
-            const history = gameCopy.history({ verbose: true });
+            const tempGame = new Chess();
+            currentHistory.forEach(move => tempGame.move(move));
+            tempGame.move(expectedMove);
+            const history = tempGame.history({ verbose: true });
             const lastMove = history[history.length - 1];
             setArrows([[lastMove.from, lastMove.to]]);
         } else if (!expectedMove) {
-            // Opening is complete from the computer's perspective
             setOpeningComplete(true);
             openingLineCompleted(openingName, openingLine, playerColor, "learn");
         }
     };
 
-    const playFirstOpponentMove = () => {
-        const gameCopy = new Chess();
-        gameCopy.move(moveSequence[0]);
-        setGame(gameCopy);
-        setPosition(gameCopy.fen());
-        setMoveHistory(gameCopy.history());
-        getAndShowExpectedMove();
-    };
-
-    const playOpponentMove = (move) => {
-        const gameCopy = new Chess(game.fen());
+    const playOpponentMove = (move, currentFen) => {
+        const gameCopy = new Chess(currentFen);
         gameCopy.move(move);
         setGame(gameCopy);
         setPosition(gameCopy.fen());
         setMoveHistory(gameCopy.history());
-        getAndShowExpectedMove();
+        getAndShowExpectedMove(gameCopy.history());
+        setCurrentIndex(prev => prev + 1);
     };
 
     const handlePlayerMove = async (move) => {
-        if (isProcessing.current || openingComplete) return; // Don't process if busy or done
+        if (isProcessing.current || openingComplete) return;
 
-        // --- Step 1: Make the move on a copy to validate it ---
         const fenBeforeMove = game.fen();
         const gameCopy = new Chess(fenBeforeMove);
         const playedMove = gameCopy.move(move);
 
-        // If the move is illegal, do nothing.
-        if (playedMove === null) {
-            return;
-        }
+        if (playedMove === null) return;
 
-        isProcessing.current = true; // Lock processing
-        setArrows([]); // Clear hint arrows
+        isProcessing.current = true;
+        setArrows([]);
 
-        // --- Step 2: Update the UI *immediately* to feel responsive ---
         setGame(gameCopy);
         setPosition(gameCopy.fen());
         setMoveHistory(gameCopy.history());
-        setExplanation("Analyzing your move..."); // Set loading state
+        setExplanation("Analyzing your move...");
 
-        // --- Step 3: Fetch explanation in the background ---
-        const expectedMoveSan = moveQueue.current.expectedMove;
+        const expectedMoveSan = moveSequence[currentIndex];
         const isCorrectMove = (playedMove.san === expectedMoveSan);
 
         try {
-            const explanationText = await getExplanationFromGemini(fenBeforeMove, playedMove.san, isCorrectMove ? null : expectedMoveSan);
+            const explanationText = await getExplanationFromGemini(
+                fenBeforeMove,
+                playedMove.san,
+                isCorrectMove ? null : expectedMoveSan
+            );
             setExplanation(explanationText);
         } catch (err) {
             console.error("Failed to get explanation:", err);
             setExplanation("Sorry, an explanation could not be fetched.");
         }
 
-        // --- Step 4: Handle the game logic after the move ---
         if (isCorrectMove) {
             setMoveResult("correct");
-            const nextOpponentMove = await MoveSelector(gameCopy.history(), openingName, openingLine);
+            const nextIndex = currentIndex + 1;
+            setCurrentIndex(nextIndex);
 
-            if (nextOpponentMove && nextOpponentMove !== "invalid") {
-                setTimeout(() => playOpponentMove(nextOpponentMove), 300);
+            if (nextIndex < moveSequence.length) {
+                const nextMove = moveSequence[nextIndex];
+
+                // Opponent’s turn → auto-play
+                if ((playerColor === "white" && nextIndex % 2 === 1) ||
+                    (playerColor === "black" && nextIndex % 2 === 0)) {
+                    setTimeout(() => playOpponentMove(nextMove, gameCopy.fen()), 300);
+                }
             } else {
                 setOpeningComplete(true);
                 openingLineCompleted(openingName, openingLine, playerColor, "learn");
             }
         } else {
-            // Incorrect move
             setMoveResult("wrong");
-            // Revert the board to the state before the wrong move after a short delay
             setTimeout(() => {
                 const gameBeforeMove = new Chess(fenBeforeMove);
                 setGame(gameBeforeMove);
                 setPosition(gameBeforeMove.fen());
                 setMoveHistory(gameBeforeMove.history());
-                getAndShowExpectedMove(); // Show the correct move hint again
             }, 1000);
         }
 
-        isProcessing.current = false; // Unlock processing
+        isProcessing.current = false;
     };
-
 
     const onDrop = (startSquare, endSquare) => {
         handlePlayerMove({

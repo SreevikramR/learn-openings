@@ -1,61 +1,85 @@
-export async function getExplanationFromGemini(fen, userMove, correctMove = null) {
+export async function getExplanationFromGemini(
+  fenBeforeUserMove,          // FEN of the position BEFORE the user's move
+  userMoveUciOrSan,           // e.g. "e2e4" or "e4"
+  correctMoveUciOrSan = null  // optional, e.g. "c5" or "g1f3"
+) {
   const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
   if (!API_KEY) {
-    console.error("Gemini API key is missing. Make sure it's set in your .env.local file.");
-    // Throw an error to be caught by the calling function
     throw new Error("Gemini API key not found.");
   }
 
-  // Use the v1beta endpoint with the latest flash model
-  const modelUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+  const modelUrl =
+    `https://generativelanguage.googleapis.com/v1beta/models/` +
+    `gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
 
-  let prompt = `You are a friendly chess coach.
-The current chess board FEN is: ${fen}.
-The user just played the move: ${userMove}.
-`;
+  // Build a coaching prompt with paragraph format
+  const promptLines = [
+    "You are a concise, friendly chess coach.",
+    `Position BEFORE the user's move (FEN): ${fenBeforeUserMove}`,
+    `The user just played: ${userMoveUciOrSan}`,
+  ];
 
-  if (correctMove && correctMove !== userMove) {
-    prompt += `This was not the best move. The recommended move is: ${correctMove}.
-Explain concisely why the user's move is a mistake and why the recommended move is better. Keep the tone encouraging.`;
+  if (correctMoveUciOrSan && correctMoveUciOrSan !== userMoveUciOrSan) {
+    promptLines.push(
+      `The correct move in the chosen opening line is: ${correctMoveUciOrSan}.`,
+      "Write a short paragraph that naturally explains:",
+      "- What the user played,",
+      "- What the correct move in the opening line is,",
+      "- Why the user's move is less effective,",
+      "- And why the correct move fits the opening's idea.",
+      "Do not use bullet points or numbers. Make it flow like a coach’s advice.",
+      "Keep it under 100 words."
+    );
   } else {
-    prompt += `Explain concisely why this is a good move and what the strategic idea behind it is.`;
+    promptLines.push(
+      "Write a short paragraph explaining why this move is correct for the opening line.",
+      "Describe the key idea, typical plan, and why this move fits the opening strategy.",
+      "Do not list options — focus only on the given move.",
+      "Keep it under 100 words."
+    );
   }
+
+  const prompt = promptLines.join("\n");
 
   try {
     const res = await fetch(modelUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
-      })
+        contents: [{ parts: [{ text: prompt }] }],
+      }),
     });
 
-    // If the response is not OK, parse the JSON error from Google for more details
     if (!res.ok) {
-      const errorData = await res.json();
-      console.error("Gemini API Error Response:", JSON.stringify(errorData, null, 2));
-      throw new Error("Failed to get explanation from Gemini. Check console for details.");
+      let errorDetail = "";
+      try {
+        const errJson = await res.json();
+        errorDetail = JSON.stringify(errJson, null, 2);
+      } catch {
+        errorDetail = await res.text();
+      }
+      throw new Error("Gemini API Error: " + errorDetail);
     }
 
     const data = await res.json();
-    const explanation = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    console.log("Gemini raw response:", data);
 
-    if (!explanation) {
-      console.warn("Gemini response was successful but contained no explanation.", data);
-      throw new Error("No explanation was returned from the API.");
+    const candidates = data?.candidates ?? [];
+    const parts = candidates[0]?.content?.parts ?? [];
+    const combined = parts
+      .map((p) => (typeof p.text === "string" ? p.text : ""))
+      .filter(Boolean)
+      .join("\n")
+      .trim();
+
+    if (!combined) {
+      throw new Error("No explanation returned from the API.");
     }
 
-    return explanation.trim();
+    return combined;
   } catch (err) {
-    console.error("Error during fetch call to Gemini:", err);
-    // Re-throw the error so the calling function knows the request failed.
+    console.error("Error calling Gemini:", err);
     throw new Error("An error occurred while contacting the Gemini API.");
   }
 }
